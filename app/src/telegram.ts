@@ -27,6 +27,9 @@ const wa = (): TgWebApp | undefined => {
 
 export const inTelegram = () => !!wa()
 
+/** initData firmado por Telegram; el servidor lo valida para saber quién juega. */
+export const initData = () => wa()?.initData ?? ''
+
 export function initTelegram() {
   const app = wa()
   if (!app) return

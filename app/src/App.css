@@ -128,6 +128,55 @@
   50% { opacity: 0; }
 }
 
+/* Ranking */
+.ranking {
+  width: 100%;
+  max-width: 340px;
+}
+
+.ranking ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 9px;
+}
+
+.ranking li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid #2a1d48;
+}
+
+.ranking .pos {
+  width: 22px;
+  color: var(--muted);
+}
+
+.ranking .who {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ranking .pts {
+  color: var(--gold);
+}
+
+.ranking .top1 { color: var(--gold); }
+.ranking .top2 { color: #d9d9e6; }
+.ranking .top3 { color: #e09a5a; }
+
+.me {
+  margin: 8px 0 0;
+  font-size: 9px;
+  line-height: 1.8;
+  color: var(--cyan);
+}
+
 /* Partida */
 .play {
   display: flex;

@@ -13,9 +13,11 @@ import {
 } from './game/engine'
 import { setMuted, sfx } from './game/sound'
 import { haptic, initTelegram, inTelegram, playerName } from './telegram'
+import { fetchLeaderboard, submitScore, type Leaderboard, type SubmitResult } from './api'
 import './App.css'
 
-type Screen = 'menu' | 'playing' | 'results'
+type Screen = 'menu' | 'playing' | 'results' | 'ranking'
+type Load = 'idle' | 'loading' | 'error'
 
 interface Popup {
   id: number
@@ -42,6 +44,31 @@ function saveBest(n: number) {
   }
 }
 
+function RankingTable({ board, status }: { board: Leaderboard | null; status: Load }) {
+  if (status === 'loading' && !board) return <p className="muted">Cargando ranking…</p>
+  if (status === 'error' && !board) return <p className="muted">No se pudo cargar el ranking.</p>
+  if (!board) return null
+  if (!board.top.length) return <p className="muted">Aún no hay puntuaciones. ¡Sé el primero!</p>
+  return (
+    <div className="ranking">
+      <ol>
+        {board.top.map((r, i) => (
+          <li key={i} className={i < 3 ? `top${i + 1}` : ''}>
+            <span className="pos">{i + 1}</span>
+            <span className="who">{r.name}</span>
+            <span className="pts">{r.score}</span>
+          </li>
+        ))}
+      </ol>
+      {board.me && (
+        <p className="me">
+          Tu posición: #{board.me.rank} de {board.players} · récord {board.me.best}
+        </p>
+      )}
+    </div>
+  )
+}
+
 const FACE: Record<Mole['kind'], string> = { jeet: '🧻', holder: '💎', whale: '🐋' }
 const LABEL: Record<Mole['kind'], string> = { jeet: 'SELL', holder: 'HODL', whale: 'DUMP' }
 
@@ -52,6 +79,9 @@ export default function App() {
   const [popups, setPopups] = useState<Popup[]>([])
   const [muted, setMutedState] = useState(false)
   const [shake, setShake] = useState(false)
+  const [board, setBoard] = useState<Leaderboard | null>(null)
+  const [boardStatus, setBoardStatus] = useState<Load>('idle')
+  const [submitted, setSubmitted] = useState<SubmitResult | null>(null)
   const gameRef = useRef(game)
   const popupId = useRef(0)
 
@@ -92,6 +122,32 @@ export default function App() {
     setGame(s)
   }, [])
 
+  const loadBoard = useCallback(async () => {
+    setBoardStatus('loading')
+    try {
+      setBoard(await fetchLeaderboard())
+      setBoardStatus('idle')
+    } catch {
+      setBoardStatus('error')
+    }
+  }, [])
+
+  // Al acabar: guarda la puntuación (solo dentro de Telegram) y refresca el ranking
+  const finishRound = useCallback(
+    async (score: number) => {
+      setSubmitted(null)
+      if (inTelegram() && score > 0) {
+        try {
+          setSubmitted(await submitScore(score))
+        } catch {
+          /* sin conexión: el récord local sigue guardado */
+        }
+      }
+      await loadBoard()
+    },
+    [loadBoard],
+  )
+
   // Bucle de juego
   useEffect(() => {
     if (screen !== 'playing') return
@@ -112,10 +168,11 @@ export default function App() {
           saveBest(next.score)
           setBest(next.score)
         }
+        void finishRound(next.score)
       }
     }, 33)
     return () => clearInterval(timer)
-  }, [screen, commit, handleEvents])
+  }, [screen, commit, handleEvents, finishRound])
 
   const start = () => {
     sfx.start()
@@ -165,6 +222,15 @@ export default function App() {
           </ul>
           <button className="btn" onClick={start}>
             JUGAR
+          </button>
+          <button
+            className="btn ghost"
+            onClick={() => {
+              setScreen('ranking')
+              void loadBoard()
+            }}
+          >
+            🏆 RANKING
           </button>
           <p className="muted">Récord: {best}</p>
           <p className="demo">Modo demo: sin token, sin wallet. Solo diversión.</p>
@@ -224,8 +290,25 @@ export default function App() {
           </p>
           {game.score >= best && game.score > 0 && <p className="record">¡NUEVO RÉCORD!</p>}
           <p className="muted">Récord: {best}</p>
+          {submitted && <p className="me">Ranking global: #{submitted.rank}</p>}
+          {!inTelegram() && <p className="muted">Abre el juego en Telegram para entrar en el ranking.</p>}
           <button className="btn" onClick={start}>
             OTRA VEZ
+          </button>
+          <button className="btn ghost" onClick={() => setScreen('menu')}>
+            MENÚ
+          </button>
+          <RankingTable board={board} status={boardStatus} />
+        </section>
+      )}
+
+      {screen === 'ranking' && (
+        <section className="panel">
+          <h2 className="title small">🏆 RANKING</h2>
+          <RankingTable board={board} status={boardStatus} />
+          {!inTelegram() && <p className="muted">Abre el juego en Telegram para entrar en el ranking.</p>}
+          <button className="btn" onClick={start}>
+            JUGAR
           </button>
           <button className="btn ghost" onClick={() => setScreen('menu')}>
             MENÚ

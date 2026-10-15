@@ -129,7 +129,7 @@ $JSLAP is **optional**. Launch it only if all of these are true for 4 weeks in a
 - ≥ 1,000 channel members with real engagement (views/post ≥ 30% of members).
 - People in the chat ask for it without you pushing.
 
-If it launches, follow `04_TACTICAL_LAUNCH_PLAN.md` and the launch checklist in `STATUS.md`. Everything technical is already prepared and dormant: Phantom linking, Holder Boost (30-minute maturation), bonding-curve bar, Graduation Jackpot rules. **Communication rules**: public fair launch, CA only in the channel and on the website, no private groups, no paid shills, risk warning on every post. More than 98% of pump.fun tokens never graduate: say it openly.
+Decision taken: $JSLAP launches. Follow `04_TACTICAL_LAUNCH_PLAN.md` and the launch checklist in `STATUS.md`. Everything technical is ready: ranked mode with Phantom, Holder Boost (30-minute maturation), weekly/monthly $JSLAP prizes, Holders League, Golden Gauntlet skin, bonding-curve bar, Graduation Jackpot rules. **Communication rules**: public fair launch, CA only in the channel and on the website, no private groups, no paid shills, risk warning on every post. More than 98% of pump.fun tokens never graduate: say it openly.
 
 ---
 
@@ -137,7 +137,7 @@ If it launches, follow `04_TACTICAL_LAUNCH_PLAN.md` and the launch checklist in 
 - **Crypto ads (CNMV, Circular 1/2022)**: any promotion of crypto-assets needs a clear risk warning. Mass campaigns (audience > 100,000) must be notified to the CNMV 10 days before.
 - **MiCA**: no market manipulation — no coordinated buys, no private "alpha" groups, no paid undisclosed promotion.
 - **Ads & affiliates**: always label them (`#ad`, "affiliate link").
-- **Prizes**: weekly prizes are free to enter (no purchase needed) — keep it that way. Rules at `/rules/`. Prizes with economic value may have tax implications; ask an advisor when they grow.
+- **Prizes**: tournaments pay $JSLAP and holding the token boosts your score, so buying increases the chances of winning. That can be treated as regulated gambling. Mitigations in place: practice mode is free, ranked entry is free (only a wallet signature), non-holders can win, 18+, "not available where prohibited", rules at `/rules/`. Talk to a legal advisor before paying the first token prize; prizes may also have tax implications.
 - **Privacy (GDPR)**: policy at `/privacy/`. Delete a player's data if they ask.
 - **Never**: promise returns, buy followers/bots, run fake giveaways.
 

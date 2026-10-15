@@ -1,5 +1,5 @@
 // POST /api/leaderboard  { initData? }
-//   -> { top, me, players, weekly: { week, top, me, players } }
+//   -> { top, holders, me, players, weekly: { week, top, me, players }, monthly: { month, top, me, players } }
 // The tops are public; "me" only with a valid initData (POST so initData never goes in the URL).
 // It also re-checks the boosts of the viewer and of the top 10 (channel membership hourly,
 // token holdings every 10 minutes once the token is live).
@@ -23,13 +23,15 @@ interface Row {
 
 interface Board {
   top: Row[]
+  holders: Row[]
   me: unknown
   players: number
 }
 
-interface Weekly {
-  week: string
-  top: { id: number; name: string; score: number }[]
+interface Tournament {
+  week?: string
+  month?: string
+  top: { id: number; name: string; score: number; raw: number; holder: number; community: boolean }[]
   me: unknown
   players: number
 }
@@ -76,21 +78,32 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     if (changed) board = await load()
-    const weekly = await rpc<Weekly>(env, 'weekly_leaderboard', { p_week: null, p_telegram_id: user?.id ?? null, p_limit: 10 })
+    const me = user?.id ?? null
+    const [weekly, monthly] = await Promise.all([
+      rpc<Tournament>(env, 'weekly_leaderboard', { p_week: null, p_telegram_id: me, p_limit: 10 }),
+      rpc<Tournament>(env, 'monthly_leaderboard', { p_month: null, p_telegram_id: me, p_limit: 10 }),
+    ])
 
-    // Never expose Telegram ids or internal timestamps
+    // Never expose Telegram ids, wallets or internal timestamps
+    const publicRow = ({ name, score, community, verified, holder, squad, medal }: Row) => ({
+      name,
+      score,
+      community,
+      verified,
+      holder: Number(holder),
+      squad,
+      medal,
+    })
+    const publicTournament = (t: Tournament) => ({
+      ...t,
+      top: t.top.map(({ name, score, raw, holder, community }) => ({ name, score, raw, holder: Number(holder), community })),
+    })
     return json({
       ...board,
-      top: board.top.map(({ name, score, community, verified, holder, squad, medal }) => ({
-        name,
-        score,
-        community,
-        verified,
-        holder: Number(holder),
-        squad,
-        medal,
-      })),
-      weekly: { ...weekly, top: weekly.top.map(({ name, score }) => ({ name, score })) },
+      top: board.top.map(publicRow),
+      holders: board.holders.map(publicRow),
+      weekly: publicTournament(weekly),
+      monthly: publicTournament(monthly),
     })
   } catch (e) {
     console.error(e)

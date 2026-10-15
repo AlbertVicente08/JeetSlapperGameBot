@@ -9,7 +9,7 @@ export interface Strategy {
 }
 
 /** Plays a full game like a player with the given strategy. Returns the taps and the score. */
-export function play(seed: number, { reaction, skip = 0, mistake = 0 }: Strategy, rand = Math.random) {
+export function play(seed: number, { reaction, skip = 0, mistake = 0 }: Strategy, rand = seeded(seed ^ 0x5bd1e995)) {
   let s = newGame(seed)
   const taps: Tap[] = []
   const plan = new Map<number, number | null>()
@@ -33,9 +33,9 @@ export function play(seed: number, { reaction, skip = 0, mistake = 0 }: Strategy
   return { taps, score: s.score, state: s }
 }
 
-/** Normal-ish human reaction time (Box-Muller), never below 60 ms. */
-export const human = (mu = 300, sd = 70) => () =>
-  Math.max(60, Math.round(mu + sd * Math.sqrt(-2 * Math.log(Math.random() || 1e-9)) * Math.cos(2 * Math.PI * Math.random())))
+/** Normal-ish human reaction time (Box-Muller), never below 60 ms. Deterministic with the given generator. */
+export const human = (mu = 300, sd = 70, rand = seeded(mu * 7919 + sd)) => () =>
+  Math.max(60, Math.round(mu + sd * Math.sqrt(-2 * Math.log(rand() || 1e-9)) * Math.cos(2 * Math.PI * rand())))
 
 /** Deterministic random generator for reproducible tests. */
 export function seeded(seed: number) {

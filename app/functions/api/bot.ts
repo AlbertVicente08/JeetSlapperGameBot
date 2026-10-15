@@ -24,10 +24,13 @@ const WELCOME = [
   '👋 <b>Welcome to Jeet Slapper</b>',
   '',
   'Slap the jeets 🧻, take down the whales 🐋, grab power-ups 🚀, dodge the rugs 💣 and <b>never touch the diamond hands</b> 💎.',
-  '30-second rounds, a global leaderboard and a <b>weekly tournament</b> 🏆.',
+  '30-second rounds, a global leaderboard and <b>weekly & monthly tournaments with $JSLAP prizes</b> 🏆.',
   '',
-  '📣 <b>Community Boost x1.5</b>: join the BertoBCN channel and your record counts x1.5 on the leaderboard. Leave it and you lose it.',
-  '🤝 <b>Squad Boost</b>: +10% for every friend you invite who plays (up to +50%). Use /invite.',
+  '👛 <b>Ranked mode</b>: connect your Phantom wallet in the game (Ranking → Connect Phantom). Prizes are sent there.',
+  '⚡ <b>Boosts</b> multiply your scores:',
+  '• 📣 Community x1.5 — be in the BertoBCN channel',
+  '• 🤝 Squad +10% per friend who plays, up to +50% — /invite',
+  '• 👛 Holder x2.5 (≥100k $JSLAP) or x5 (≥500k), after holding 30 min',
 ].join('\n')
 
 interface TgFrom {

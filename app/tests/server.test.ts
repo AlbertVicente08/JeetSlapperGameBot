@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { parseReferral, verifyInitData } from '../server/telegram.ts'
 import { MATURATION_MS, nextHolder, tierFor } from '../server/holder.ts'
 import { base58Decode, base58Encode, findProgramAddress, isAddress, verifySignature, walletLinkMessage } from '../server/solana.ts'
-import { lastWeekStart } from '../server/weekly.ts'
+import { lastMonthStart, lastWeekStart } from '../server/weekly.ts'
 import { signInitData } from './helpers.ts'
 
 const TOKEN = '123456:TEST_ONLY'
@@ -75,4 +75,9 @@ test('wallet link signature (Ed25519) is verified', async () => {
 test('last week start is the previous Monday (UTC)', () => {
   assert.equal(lastWeekStart(new Date('2026-10-19T00:05:00Z')), '2026-10-12') // Monday
   assert.equal(lastWeekStart(new Date('2026-10-18T23:00:00Z')), '2026-10-05') // Sunday
+})
+
+test('last month start is the first day of the previous month (UTC)', () => {
+  assert.equal(lastMonthStart(new Date('2026-11-01T00:10:00Z')), '2026-10-01')
+  assert.equal(lastMonthStart(new Date('2027-01-01T00:10:00Z')), '2026-12-01')
 })

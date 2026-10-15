@@ -3,7 +3,8 @@
 //
 // 1. The session must belong to the player, be unused and match a real game duration.
 // 2. Quick bot detector on the tap log (every game).
-// 3. If the game would enter the all-time top 3 or this week's top 3, the server replays it from the seed
+// 3. If the game would enter the all-time top 3, this week's top 3 or this month's top 1 (the prize places),
+//    the server replays it from the seed
 //    and checks that the score adds up and the reactions are human.
 // 4. If a replayed game is rejected or flagged, the admin gets a Telegram alert.
 import { json, rpc, type Env, type PagesFunction } from '../../server/env.ts'
@@ -50,11 +51,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
     if (verdict.status !== 'rejected' && score > 0) {
       const ranked = Math.round(score * (member ? COMMUNITY_BOOST : 1)) // lower bound: holder/squad boosts only add
-      const [allTime, weekly] = await Promise.all([
+      const [allTime, weekly, monthly] = await Promise.all([
         rpc<number>(env, 'ranked_at', { p_rank: VERIFY_TOP }),
         rpc<number>(env, 'weekly_at', { p_rank: VERIFY_TOP }),
+        rpc<number>(env, 'monthly_at', { p_rank: 1 }),
       ])
-      if (ranked >= allTime || score >= weekly) {
+      if (ranked >= allTime || ranked >= weekly || ranked >= monthly) {
         // Would enter a top 3: replay the whole game
         const r = replayCheck(session.seed, taps, score)
         replayed = true

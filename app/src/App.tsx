@@ -20,8 +20,9 @@ import {
 import { setMuted, sfx } from './game/sound'
 import { haptic, initTelegram, inTelegram, inviteLink, openLink, playerName } from './telegram'
 import { COMMUNITY_BOOST, HOLDER_HOLD_MINUTES, HOLDER_TIERS, LINKS, SQUAD_MAX, SQUAD_STEP } from './community'
-import { JACKPOT_SPLIT, WEEKLY_PRIZES } from './prizes'
+import { fmtTokens, JACKPOT_SPLIT, MONTHLY_PRIZES, WEEKLY_PRIZES } from './prizes'
 import {
+  ApiError,
   fetchCurve,
   fetchLeaderboard,
   startSession,
@@ -30,8 +31,10 @@ import {
   type Curve,
   type Leaderboard,
   type Me,
+  type Ranked,
   type Session,
   type SubmitResult,
+  type TournamentBoard,
 } from './api'
 import { drawScoreCard, shareCardFile, shareOnTelegram, shareOnX } from './share'
 import './App.css'
@@ -128,12 +131,12 @@ function CurveBar({ curve }: { curve: Curve | null }) {
   )
 }
 
-function AllTimeTable({ board }: { board: Leaderboard }) {
-  if (!board.top.length) return <p className="muted">No scores yet. Be the first!</p>
+function AllTimeTable({ board, rows, empty }: { board: Leaderboard; rows: Ranked[]; empty: string }) {
+  if (!rows.length) return <p className="muted">{empty}</p>
   return (
     <div className="ranking">
       <ol>
-        {board.top.map((r, i) => (
+        {rows.map((r, i) => (
           <li key={i} className={i < 3 ? `top${i + 1}` : ''}>
             <span className="pos">{i + 1}</span>
             <span className="who">
@@ -157,29 +160,58 @@ function AllTimeTable({ board }: { board: Leaderboard }) {
   )
 }
 
-function WeeklyTable({ board }: { board: Leaderboard }) {
-  const w = board.weekly
+function TournamentTable({ t, label, prizes }: { t: TournamentBoard; label: string; prizes: readonly { medal: string; tokens: number }[] }) {
   return (
     <div className="ranking">
-      <p className="muted">Week of {w.week} · ends Sunday 23:59 UTC · no boosts, pure skill</p>
-      {w.top.length ? (
+      <p className="muted">{label} · best game x boosts</p>
+      <p className="prizeline">
+        {prizes.map(p => (
+          <span key={p.medal}>
+            {p.medal} {fmtTokens(p.tokens)}
+          </span>
+        ))}
+      </p>
+      {t.top.length ? (
         <ol>
-          {w.top.map((r, i) => (
+          {t.top.map((r, i) => (
             <li key={i} className={i < 3 ? `top${i + 1}` : ''}>
               <span className="pos">{MEDALS[i] ?? i + 1}</span>
-              <span className="who">{r.name}</span>
-              <span className="pts">{r.score}</span>
+              <span className="who">
+                {r.name}
+                {r.community && <span className="badge">📣</span>}
+                {r.holder > 1 && <span className="badge">👛</span>}
+              </span>
+              <span className="pts">
+                {r.score}
+                {r.score !== r.raw && <small className="raw"> ({r.raw})</small>}
+              </span>
             </li>
           ))}
         </ol>
       ) : (
-        <p className="muted">Nobody has played this week yet. Take the lead!</p>
+        <p className="muted">Nobody has played yet. Take the lead!</p>
       )}
-      {w.me && (
+      {t.me && (
         <p className="me">
-          You this week: #{w.me.rank} of {w.players} · {w.me.score} pts
+          You: #{t.me.rank} of {t.players} · {t.me.score} pts ({t.me.raw} x boosts)
         </p>
       )}
+    </div>
+  )
+}
+
+function RankedLock({ onConnect, connecting }: { onConnect: () => void; connecting: boolean }) {
+  return (
+    <div className="info lock">
+      <h3>🔒 Ranked mode is locked</h3>
+      <p>
+        Connect your <b>Phantom</b> wallet to play ranked, enter the weekly and monthly tournaments and receive your{' '}
+        {'$JSLAP'} prizes. Linking only needs a signature: it's free and never moves funds.
+      </p>
+      <button className="btn small" onClick={onConnect} disabled={connecting}>
+        {connecting ? 'OPENING PHANTOM…' : '👛 CONNECT PHANTOM'}
+      </button>
+      <p className="muted">Until then you can play in practice mode (it doesn't count).</p>
     </div>
   )
 }
@@ -187,20 +219,30 @@ function WeeklyTable({ board }: { board: Leaderboard }) {
 function Prizes() {
   return (
     <div className="info prizes">
-      <h3>🏆 Prizes</h3>
+      <h3>🏆 Prizes in $JSLAP</h3>
       <p>
-        <b>Weekly tournament</b> (best game of the week, no boosts):
+        <b>Weekly tournament</b> (Mon–Sun UTC, best game x boosts):
       </p>
       <ul className="plain">
         {WEEKLY_PRIZES.map(p => (
           <li key={p.place}>
-            {p.medal} {p.prize}
+            {p.medal} {fmtTokens(p.tokens)}
           </li>
         ))}
       </ul>
       <p>
-        <b>Graduation Jackpot</b> (only if $JSLAP launches and graduates on pump.fun): the all-time top 20 share 1.5% of the
-        supply, paid in 3 parts over 48 h, if they keep holding.
+        <b>Monthly tournament</b> (calendar month UTC):
+      </p>
+      <ul className="plain">
+        {MONTHLY_PRIZES.map(p => (
+          <li key={p.place}>
+            {p.medal} {fmtTokens(p.tokens)}
+          </li>
+        ))}
+      </ul>
+      <p>
+        <b>Graduation Jackpot</b>: when $JSLAP graduates on pump.fun, the all-time top 20 share 1.5% of the supply, paid in
+        3 parts over 48 h, if they keep holding.
       </p>
       <ul className="plain">
         {JACKPOT_SPLIT.map(j => (
@@ -210,7 +252,8 @@ function Prizes() {
         ))}
       </ul>
       <p className="muted">
-        Free to play: no purchase needed to win the weekly prizes. Top games are verified and reviewed before any prize.{' '}
+        Prizes are sent to your linked Phantom wallet after the winning games are verified and reviewed. 18+ only, not
+        available where prohibited.{' '}
         <a href={LINKS.rules} onClick={e => (e.preventDefault(), openLink(LINKS.rules))}>
           Full rules
         </a>
@@ -257,20 +300,19 @@ function Boosts({ me, onRefresh }: { me: Me | null; onRefresh: () => void }) {
         )}
       </div>
       <p className="muted">
-        Boosts multiply your all-time score. Leave the channel and you lose x{COMMUNITY_BOOST}. Each friend who joins with
-        your link and plays adds +10% (max +50%).
+        Boosts multiply your scores in the weekly, monthly and all-time rankings. Leave the channel and you lose x
+        {COMMUNITY_BOOST}. Each friend who joins with your link and plays a ranked game adds +10% (max +50%).
       </p>
     </div>
   )
 }
 
-function HolderInfo({ me, curve, onConnect, connecting }: { me: Me | null; curve: Curve | null; onConnect: () => void; connecting: boolean }) {
-  const live = !!curve?.live
+function HolderInfo({ me, onConnect, connecting }: { me: Me | null; onConnect: () => void; connecting: boolean }) {
   const maturing = me?.holderSince && me.holderTier > 0 && me.holderMult < (me.holderTier === 2 ? 5 : 2.5)
   return (
     <div className="info">
       <h3>👛 Phantom wallet · Holder Boost</h3>
-      <p>Link your Phantom wallet. If you hold $JSLAP, your leaderboard score is multiplied:</p>
+      <p>Hold $JSLAP in your linked Phantom wallet and all your ranked scores are multiplied:</p>
       <table>
         <tbody>
           {HOLDER_TIERS.map(t => (
@@ -286,10 +328,12 @@ function HolderInfo({ me, curve, onConnect, connecting }: { me: Me | null; curve
         <li>If you sell below your tier, the boost drops at once.</li>
         <li>One wallet per Telegram account. Linking only needs a signature: it costs nothing and never moves funds.</li>
       </ul>
+      <ul>
+        <li>🥊 Holders also get the <b>Golden Gauntlet</b> skin and enter the <b>Holders League</b>.</li>
+      </ul>
       {me?.wallet ? (
         <p className="me">
-          Linked: {shortAddr(me.wallet)}
-          {live ? (maturing ? ` · maturing (${HOLDER_HOLD_MINUTES} min)…` : ` · boost x${me.holderMult}`) : ' · boost activates at launch'}
+          Linked: {shortAddr(me.wallet)} · {maturing ? `maturing (${HOLDER_HOLD_MINUTES} min)…` : `holder boost x${me.holderMult}`}
         </p>
       ) : null}
       {inTelegram() && (
@@ -297,11 +341,7 @@ function HolderInfo({ me, curve, onConnect, connecting }: { me: Me | null; curve
           {connecting ? 'OPENING PHANTOM…' : me?.wallet ? 'CHANGE WALLET' : 'CONNECT PHANTOM'}
         </button>
       )}
-      <p className="warn">
-        {live
-          ? '⚠️ Crypto is high risk. Never buy what you cannot afford to lose. This is not financial advice.'
-          : '⚠️ $JSLAP does not exist yet. This is the plan and may change. Crypto is high risk: never buy what you cannot afford to lose.'}
-      </p>
+      <p className="warn">⚠️ Crypto is high risk. Never buy what you cannot afford to lose. This is not financial advice.</p>
     </div>
   )
 }
@@ -336,7 +376,8 @@ function CommunityLinks() {
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('menu')
-  const [tab, setTab] = useState<'weekly' | 'alltime'>('weekly')
+  const [tab, setTab] = useState<'weekly' | 'monthly' | 'alltime' | 'holders'>('weekly')
+  const [practice, setPractice] = useState(false)
   const [game, setGame] = useState<GameState>(newGame)
   const [best, setBest] = useState(loadBest)
   const [popups, setPopups] = useState<Popup[]>([])
@@ -358,6 +399,9 @@ export default function App() {
 
   const me = board?.me ?? null
   const community = me?.community ?? submitted?.community ?? null
+  // Ranked mode needs Telegram + a linked Phantom wallet; otherwise the game is practice only
+  const canRank = inTelegram() && !!me?.wallet
+  const golden = (me?.holderTier ?? 0) > 0 // Golden Gauntlet skin for holders
 
   const addPopup = useCallback((hole: number, text: string, bad: boolean) => {
     const id = ++popupId.current
@@ -511,14 +555,20 @@ export default function App() {
     sessionRef.current = null
     setOffline(false)
     setCard(null)
-    if (inTelegram()) {
+    setPractice(!canRank)
+    if (canRank) {
       // Ranked game: the server gives the seed and keeps it to verify the game
       setStarting(true)
       try {
         sessionRef.current = await startSession()
         seed = sessionRef.current.seed
-      } catch {
-        setOffline(true) // offline: you can play, but it won't count for the leaderboard
+      } catch (e) {
+        if (e instanceof ApiError && e.code === 'wallet_required') {
+          setPractice(true)
+          void loadBoard()
+        } else {
+          setOffline(true) // offline: you can play, but it won't count for the leaderboard
+        }
       }
       setStarting(false)
     }
@@ -570,7 +620,7 @@ export default function App() {
   const final = finalPump(game)
 
   return (
-    <main className={`app ${shake ? 'shake' : ''} ${flash ? `flash-${flash}` : ''}`}>
+    <main className={`app ${shake ? 'shake' : ''} ${flash ? `flash-${flash}` : ''} ${golden ? 'golden' : ''}`}>
       <button className="mute" onClick={toggleMute} aria-label={muted ? 'Sound on' : 'Mute'}>
         {muted ? '🔇' : '🔊'}
       </button>
@@ -587,7 +637,7 @@ export default function App() {
           <CurveBar curve={curve} />
           <Legend />
           <button className="btn" onClick={start}>
-            {starting ? 'LOADING…' : inTelegram() ? 'PLAY' : 'PLAY DEMO'}
+            {starting ? 'LOADING…' : canRank ? '⚔️ PLAY RANKED' : inTelegram() ? 'PRACTICE' : 'PLAY DEMO'}
           </button>
           <button className="btn ghost" onClick={openRanking}>
             🏆 RANKING & PRIZES
@@ -595,11 +645,16 @@ export default function App() {
           <p className="muted">Your record: {best}</p>
           {inTelegram() ? (
             <p className="muted">
-              Hi {playerName()} · your games count for the leaderboard
-              {community ? ` · 📣 x${COMMUNITY_BOOST} active` : ''}
+              Hi {playerName()}
+              {canRank ? ' · ranked mode ✅' : ''}
+              {golden ? ' · 🥊 Golden Gauntlet' : ''}
+              {community ? ` · 📣 x${COMMUNITY_BOOST}` : ''}
             </p>
           ) : (
             <p className="demo">Demo mode: games don't count. Open the game in Telegram to compete.</p>
+          )}
+          {inTelegram() && !me?.wallet && boardStatus !== 'loading' && (
+            <RankedLock onConnect={() => void connectWallet()} connecting={connecting} />
           )}
           {inTelegram() && <Boosts me={me} onRefresh={() => void loadBoard()} />}
           <CommunityLinks />
@@ -686,8 +741,11 @@ export default function App() {
           )}
           {offline && <p className="muted">Offline: this game doesn't count for the ranking.</p>}
           {!inTelegram() && <p className="muted">Open the game in Telegram to enter the ranking.</p>}
+          {inTelegram() && practice && (
+            <RankedLock onConnect={() => void connectWallet()} connecting={connecting} />
+          )}
           <button className="btn" onClick={start}>
-            PLAY AGAIN
+            {canRank ? 'PLAY RANKED AGAIN' : 'PLAY AGAIN'}
           </button>
           {game.score > 0 && (
             <div className="share">
@@ -731,19 +789,38 @@ export default function App() {
         <section className="panel">
           <h2 className="title small">🏆 RANKING</h2>
           <div className="tabs">
-            <button className={tab === 'weekly' ? 'on' : ''} onClick={() => setTab('weekly')}>
-              THIS WEEK
-            </button>
-            <button className={tab === 'alltime' ? 'on' : ''} onClick={() => setTab('alltime')}>
-              ALL-TIME
-            </button>
+            {(
+              [
+                ['weekly', 'WEEK'],
+                ['monthly', 'MONTH'],
+                ['alltime', 'ALL-TIME'],
+                ['holders', '👛 HOLDERS'],
+              ] as const
+            ).map(([key, label]) => (
+              <button key={key} className={tab === key ? 'on' : ''} onClick={() => setTab(key)}>
+                {label}
+              </button>
+            ))}
           </div>
           {boardStatus === 'loading' && !board && <p className="muted">Loading ranking…</p>}
           {boardStatus === 'error' && !board && <p className="muted">Couldn't load the ranking.</p>}
-          {board && (tab === 'weekly' ? <WeeklyTable board={board} /> : <AllTimeTable board={board} />)}
+          {board && tab === 'weekly' && (
+            <TournamentTable t={board.weekly} label={`Week of ${board.weekly.week} · ends Sunday 23:59 UTC`} prizes={WEEKLY_PRIZES} />
+          )}
+          {board && tab === 'monthly' && (
+            <TournamentTable t={board.monthly} label={`Month ${board.monthly.month?.slice(0, 7)} · ends last day 23:59 UTC`} prizes={MONTHLY_PRIZES} />
+          )}
+          {board && tab === 'alltime' && <AllTimeTable board={board} rows={board.top} empty="No scores yet. Be the first!" />}
+          {board && tab === 'holders' && (
+            <>
+              <p className="muted">Holders League: only players holding $JSLAP in their linked wallet.</p>
+              <AllTimeTable board={board} rows={board.holders} empty="No holders in the ranking yet." />
+            </>
+          )}
           {!inTelegram() && <p className="muted">Open the game in Telegram to enter the ranking.</p>}
+          {inTelegram() && !me?.wallet && <RankedLock onConnect={() => void connectWallet()} connecting={connecting} />}
           <button className="btn" onClick={start}>
-            PLAY
+            {canRank ? '⚔️ PLAY RANKED' : 'PRACTICE'}
           </button>
           <button className="btn ghost" onClick={() => setScreen('menu')}>
             MENU
@@ -751,12 +828,13 @@ export default function App() {
           <Prizes />
           <div className="info">
             <p>
-              🛡️ <b>Anti-cheat</b>: every game goes through a bot detector. Games that would enter a top 3 are replayed in
-              full by the server to check they are possible and human (✅ verified). Bot and script games don't count.
+              🛡️ <b>Anti-cheat</b>: every game goes through a bot detector. Games that would win a prize or enter a top 3
+              are replayed in full by the server to check they are possible and human (✅ verified). Bot and script games
+              don't count.
             </p>
           </div>
           {inTelegram() && <Boosts me={me} onRefresh={() => void loadBoard()} />}
-          <HolderInfo me={me} curve={curve} onConnect={() => void connectWallet()} connecting={connecting} />
+          <HolderInfo me={me} onConnect={() => void connectWallet()} connecting={connecting} />
           <CommunityLinks />
         </section>
       )}

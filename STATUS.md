@@ -12,7 +12,11 @@
 | Rules & prizes page / Privacy policy (GDPR) | `/rules/` · `/privacy/` |
 | Game (Telegram Mini App): 12 squares, power-ups, bombs, FINAL PUMP, English UI | https://jeet-slapper.pages.dev/play/ |
 | Bot @JeetSlapperGameBot: Play button, `/start`, `/invite`, AI `/roast` and `/slap` (Groq), profile photo | Telegram |
-| All-time leaderboard with boosts + **weekly tournament** (no boosts) | Game → Ranking |
+| Rankings: **weekly** and **monthly** tournaments + **all-time** + **Holders League**, all with boosts | Game → Ranking |
+| **Ranked mode requires a linked Phantom wallet** (otherwise practice mode); prizes are paid to that wallet | Game, `/api/session` |
+| Token prizes: weekly 🥇 100k · 🥈 50k · 🥉 25k $JSLAP, monthly 🏆 250k $JSLAP (edit in `app/src/prizes.ts`) | Game, landing, `/rules/`, channel posts |
+| Monthly results posted automatically on the 1st at 00:10 UTC | Supabase `pg_cron` → `/api/cron/monthly` |
+| 🥊 Golden Gauntlet skin for holders | Game |
 | **Prizes zone** (weekly top 3 + Graduation Jackpot plan) | Game, landing, `/rules/` (edit in `app/src/prizes.ts`) |
 | Weekly results posted automatically every Monday 00:05 UTC in the channel + winners DM'd to the admin | Supabase `pg_cron` → `/api/cron/weekly` |
 | Hall of Fame 👑 for last week's top 3 | All-time ranking |
@@ -25,7 +29,7 @@
 | Code on GitHub | https://github.com/AlbertVicente08/JeetSlapperGameBot |
 | Monthly cost | €0 (Cloudflare Pages + Supabase + Groq free tiers) |
 
-### Prepared for the token (dormant until `TOKEN_MINT` is set)
+### Token features (switch on automatically when `TOKEN_MINT` is set)
 | What | Status |
 |---|---|
 | Connect Phantom (signature-verified, one wallet per account) | ✅ works now: Ranking → Connect Phantom → `/wallet/` page inside Phantom |
@@ -45,7 +49,9 @@
 - [ ] **Bot permissions in the channel**: it needs **"Post messages"** to publish the weekly results.
 - [ ] **Play a game from your phone** to test the new version end to end.
 - [ ] **Week 1 of the growth plan**: X bios + pinned thread, chat rules + anti-spam bot, invite 10–20 friends.
-- [ ] **Buy a few Telegram Stars** for the weekly 🥇 Telegram Gift (or change the prize in `app/src/prizes.ts`).
+- [ ] **Create $JSLAP on pump.fun** and set `TOKEN_MINT` (see the launch checklist below). The site already presents the token as live; Holder Boost, the curve bar and holder balances start working as soon as the mint is set.
+- [ ] **Prize budget**: weekly 175,000 + monthly 250,000 $JSLAP ≈ 9.1M + 3M = **~12.1M $JSLAP per year (1.2% of the supply)**. Decide where it comes from (dev bag, creator fees, buybacks) and fund the public prize wallet before paying the first prize.
+- [ ] **Talk to a legal advisor** before paying token prizes: prizes where buying the token increases your chances can be treated as regulated gambling (you are the organiser and you are in Spain).
 
 ## 🟡 Next ideas (not started)
 - [ ] Seasons (reset all-time every 6–8 weeks, keep a Hall of Fame).

@@ -24,16 +24,21 @@ export interface Me {
   holderSince: string | null
 }
 
+export interface TournamentBoard {
+  week?: string
+  month?: string
+  top: { name: string; score: number; raw: number; holder: number; community: boolean }[]
+  me: { score: number; raw: number; rank: number } | null
+  players: number
+}
+
 export interface Leaderboard {
   top: Ranked[]
+  holders: Ranked[]
   me: Me | null
   players: number
-  weekly: {
-    week: string
-    top: { name: string; score: number }[]
-    me: { score: number; rank: number } | null
-    players: number
-  }
+  weekly: TournamentBoard
+  monthly: TournamentBoard
 }
 
 export interface SubmitResult {
@@ -64,13 +69,26 @@ export interface Curve {
   error?: string
 }
 
+export class ApiError extends Error {
+  status: number
+  code?: string
+  constructor(path: string, status: number, code?: string) {
+    super(`${path}: ${status}${code ? ` ${code}` : ''}`)
+    this.status = status
+    this.code = code
+  }
+}
+
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(path, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   })
-  if (!res.ok) throw new Error(`${path}: ${res.status}`)
+  if (!res.ok) {
+    const data = (await res.json().catch(() => ({}))) as { error?: string }
+    throw new ApiError(path, res.status, data.error)
+  }
   return res.json() as Promise<T>
 }
 

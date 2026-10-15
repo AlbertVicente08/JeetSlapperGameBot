@@ -129,13 +129,13 @@ function CommunityBoost({ active, onCheck }: { active: boolean | null; onCheck: 
       <h3>📣 Boost Comunidad · x{COMMUNITY_BOOST}</h3>
       {active ? (
         <p>
-          <b>¡Activo!</b> Estás en el canal, así que tu récord cuenta x{COMMUNITY_BOOST} en el ranking. Si te sales del
-          canal, lo pierdes.
+          <b>¡Activo!</b> Estás en la comunidad, así que tu récord cuenta x{COMMUNITY_BOOST} en el ranking. Si te sales,
+          lo pierdes.
         </p>
       ) : (
         <>
           <p>
-            Únete al canal de BertoBCN y tu récord contará <b>x{COMMUNITY_BOOST}</b> en el ranking. Si te sales del canal,
+            Únete al canal o al chat de BertoBCN y tu récord contará <b>x{COMMUNITY_BOOST}</b> en el ranking. Si te sales,
             pierdes el boost.
           </p>
           <div className="row">

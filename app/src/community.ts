@@ -5,7 +5,7 @@ export const LINKS = {
   twitter: 'https://x.com/albertv_dev',
 }
 
-/** Multiplicador del ranking por estar en el canal (se aplica en el servidor). */
+/** Multiplicador del ranking por estar en el canal o en el chat (se aplica en el servidor). */
 export const COMMUNITY_BOOST = 1.5
 
 /** Minutos que hay que mantener los tokens para activar el Holder Boost. */

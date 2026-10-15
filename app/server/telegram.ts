@@ -27,14 +27,14 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 /**
- * Chats de la comunidad: estar en cualquiera de ellos da el Boost Comunidad.
- * El bot debe ser administrador del canal y/o miembro del chat de debate para poder comprobarlo.
+ * Canal principal de BertoBCN: estar dentro da el Boost Comunidad.
+ * El bot debe ser administrador del canal para poder comprobarlo.
  */
-export const COMMUNITY_CHATS = ['@RealBertoBcn', '-1004463594896'] // canal BertoBCN y su chat de debate
+export const COMMUNITY_CHATS = ['@RealBertoBcn']
 
 /**
- * ¿Está el usuario en el canal o en el chat? true/false, o null si Telegram no lo pudo comprobar
- * en ninguno (por ejemplo, si el bot no está en ninguno de los dos).
+ * ¿Está el usuario en el canal? true/false, o null si Telegram no lo pudo comprobar
+ * (por ejemplo, si el bot no es administrador del canal).
  */
 export async function isChannelMember(botToken: string, userId: number): Promise<boolean | null> {
   const results = await Promise.all(COMMUNITY_CHATS.map(chat => isMemberOf(botToken, chat, userId)))

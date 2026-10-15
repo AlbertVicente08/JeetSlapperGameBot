@@ -15,7 +15,7 @@ const WELCOME = [
   'Abofetea a los jeets 🧻, tumba a las ballenas 🐋 y <b>no toques a los diamond hands</b> 💎.',
   'Rondas de 30 segundos, power-ups 🚀, bombas 💣 y ranking global.',
   '',
-  '📣 <b>Boost Comunidad x1,5</b>: si estás en el canal o en el chat de BertoBCN, tu récord cuenta x1,5 en el ranking. Si te sales, lo pierdes.',
+  '📣 <b>Boost Comunidad x1,5</b>: si estás en el canal de BertoBCN, tu récord cuenta x1,5 en el ranking. Si te sales, lo pierdes.',
 ].join('\n')
 
 interface Update {

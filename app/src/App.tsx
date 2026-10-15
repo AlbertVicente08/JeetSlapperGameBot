@@ -429,6 +429,7 @@ export default function App() {
 
       {screen === 'menu' && (
         <section className="panel">
+          <img className="logo" src="/slap.jpg" alt="" width="120" height="120" />
           <h1 className="title">
             JEET
             <br />

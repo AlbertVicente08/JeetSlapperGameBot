@@ -104,6 +104,15 @@ h2 {
   padding-top: 40px;
 }
 
+.hero-img {
+  display: block;
+  width: min(280px, 70vw);
+  height: auto;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--pink), 0 0 40px rgba(255, 46, 136, 0.45);
+}
+
 .kicker {
   font-family: var(--pixel);
   font-size: 10px;

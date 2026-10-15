@@ -41,6 +41,13 @@
   text-align: center;
 }
 
+.logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--pink), 0 0 24px rgba(255, 46, 136, 0.45);
+}
+
 .title {
   margin: 0;
   font-size: 40px;

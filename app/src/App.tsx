@@ -8,17 +8,19 @@ import {
   pumpActive,
   RUG_PENALTY,
   slap,
+  STEP_MS,
   tick,
   tier,
   TIER_NAMES,
   type Event,
   type GameState,
   type Mole,
+  type Tap,
 } from './game/engine'
 import { setMuted, sfx } from './game/sound'
 import { haptic, initTelegram, inTelegram, openLink, playerName } from './telegram'
 import { COMMUNITY_BOOST, HOLDER_HOLD_MINUTES, HOLDER_TIERS, LINKS } from './community'
-import { fetchLeaderboard, submitScore, type Leaderboard, type SubmitResult } from './api'
+import { fetchLeaderboard, startSession, submitScore, type Leaderboard, type Session, type SubmitResult } from './api'
 import './App.css'
 
 type Screen = 'menu' | 'playing' | 'results' | 'ranking'
@@ -105,6 +107,7 @@ function RankingTable({ board, status }: { board: Leaderboard | null; status: Lo
             <span className="who">
               {r.name}
               {r.community && <span className="badge" title="Boost comunidad">📣</span>}
+              {r.verified && <span className="badge" title="Partida verificada por el servidor">✅</span>}
             </span>
             <span className="pts">{r.score}</span>
           </li>
@@ -220,8 +223,12 @@ export default function App() {
   const [board, setBoard] = useState<Leaderboard | null>(null)
   const [boardStatus, setBoardStatus] = useState<Load>('idle')
   const [submitted, setSubmitted] = useState<SubmitResult | null>(null)
+  const [starting, setStarting] = useState(false)
+  const [offline, setOffline] = useState(false)
   const gameRef = useRef(game)
   const popupId = useRef(0)
+  const sessionRef = useRef<Session | null>(null)
+  const tapsRef = useRef<Tap[]>([])
 
   const community = board?.me?.community ?? submitted?.community ?? null
 
@@ -320,9 +327,11 @@ export default function App() {
   const finishRound = useCallback(
     async (score: number) => {
       setSubmitted(null)
-      if (inTelegram() && score > 0) {
+      const session = sessionRef.current
+      sessionRef.current = null
+      if (session && score > 0) {
         try {
-          setSubmitted(await submitScore(score))
+          setSubmitted(await submitScore(session.sessionId, score, tapsRef.current))
         } catch {
           /* sin conexión: el récord local sigue guardado */
         }
@@ -335,14 +344,21 @@ export default function App() {
   // Bucle de juego
   useEffect(() => {
     if (screen !== 'playing') return
-    // setInterval en vez de requestAnimationFrame: algunos webviews no disparan rAF de forma fiable
+    // setInterval en vez de requestAnimationFrame: algunos webviews no disparan rAF de forma fiable.
+    // El juego avanza en pasos fijos de STEP_MS para que el servidor pueda repetir la partida igual.
     let last = performance.now()
+    let acc = 0
     const timer = setInterval(() => {
       const now = performance.now()
-      const dt = Math.min(100, now - last)
+      acc += Math.min(100, now - last)
       last = now
-      const [next, events] = tick(gameRef.current, dt)
-      handleEvents(events)
+      let next = gameRef.current
+      while (acc >= STEP_MS && !next.over) {
+        const [s, events] = tick(next)
+        handleEvents(events)
+        next = s
+        acc -= STEP_MS
+      }
       commit(next)
       if (next.over) {
         clearInterval(timer)
@@ -358,15 +374,34 @@ export default function App() {
     return () => clearInterval(timer)
   }, [screen, commit, handleEvents, finishRound])
 
-  const start = () => {
+  const start = async () => {
+    if (starting) return
+    let seed: number | undefined
+    sessionRef.current = null
+    setOffline(false)
+    if (inTelegram()) {
+      // Partida de ranking: el servidor da la semilla y la guarda para poder verificarla
+      setStarting(true)
+      try {
+        sessionRef.current = await startSession()
+        seed = sessionRef.current.seed
+      } catch {
+        setOffline(true) // sin conexión: se juega igual, pero no cuenta para el ranking
+      }
+      setStarting(false)
+    }
     sfx.start()
     setPopups([])
-    commit(newGame())
+    tapsRef.current = []
+    commit(newGame(seed))
     setScreen('playing')
   }
 
-  const onSlap = (hole: number) => {
-    const [next, events] = slap(gameRef.current, hole)
+  const onSlap = (hole: number, trusted: boolean) => {
+    const s = gameRef.current
+    if (s.over) return
+    tapsRef.current.push([s.elapsed, hole, trusted ? 1 : 0])
+    const [next, events] = slap(s, hole)
     handleEvents(events)
     commit(next)
   }
@@ -402,7 +437,7 @@ export default function App() {
           <p className="tagline">Deja de mirar las velas rojas. Abofetea a los jeets.</p>
           <Legend />
           <button className="btn" onClick={start}>
-            {inTelegram() ? 'JUGAR' : 'JUGAR DEMO'}
+            {starting ? 'CARGANDO…' : inTelegram() ? 'JUGAR' : 'JUGAR DEMO'}
           </button>
           <button className="btn ghost" onClick={openRanking}>
             🏆 MODO RANKING
@@ -451,7 +486,12 @@ export default function App() {
           </div>
           <div className={`grid ${pump || final ? 'hotgrid' : ''}`}>
             {game.holes.map((m, i) => (
-              <button key={i} className="hole" onPointerDown={() => onSlap(i)} aria-label={`Agujero ${i + 1}`}>
+              <button
+                key={i}
+                className="hole"
+                onPointerDown={e => onSlap(i, e.isTrusted)}
+                aria-label={`Agujero ${i + 1}`}
+              >
                 {m && (
                   <span key={m.id} className={`mole ${m.kind}`}>
                     <span className="face">{FACE[m.kind]}</span>
@@ -481,12 +521,20 @@ export default function App() {
           </p>
           {game.score >= best && game.score > 0 && <p className="record">¡NUEVO RÉCORD!</p>}
           <p className="muted">Récord: {best}</p>
-          {submitted && (
+          {submitted?.counted && (
             <p className="me">
               Ranking global: #{submitted.rank} · {submitted.ranked} pts
               {submitted.community ? ` (📣 x${COMMUNITY_BOOST})` : ''}
+              {submitted.replayed ? ' · ✅ verificada' : ''}
             </p>
           )}
+          {submitted && !submitted.counted && (
+            <p className="rejected">
+              {submitted.status === 'suspicious' ? '🔍 Partida en revisión' : '🚫 Partida no válida para el ranking'}
+              {submitted.reason ? `: ${submitted.reason}` : ''}
+            </p>
+          )}
+          {offline && <p className="muted">Sin conexión: esta partida no cuenta para el ranking.</p>}
           {!inTelegram() && <p className="muted">Abre el juego en Telegram para entrar en el ranking.</p>}
           <button className="btn" onClick={start}>
             OTRA VEZ
@@ -507,6 +555,11 @@ export default function App() {
             <p>
               Compites contra todos los jugadores. Cuenta tu <b>mejor puntuación</b> multiplicada por tus boosts. Solo
               cuentan las partidas jugadas desde Telegram con tu cuenta.
+            </p>
+            <p>
+              🛡️ <b>Anti-trampas</b>: todas las partidas pasan por un detector de bots. Si una partida entra en el{' '}
+              <b>top 3</b>, el servidor la repite entera para comprobar que es posible y humana (✅ verificada). Las
+              partidas de bots o scripts no cuentan.
             </p>
           </div>
           <RankingTable board={board} status={boardStatus} />

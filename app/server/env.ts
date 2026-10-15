@@ -28,5 +28,7 @@ export async function rpc<T>(env: Env, fn: string, args: Record<string, unknown>
     body: JSON.stringify(args),
   })
   if (!res.ok) throw new Error(`Supabase ${fn}: ${res.status} ${await res.text()}`)
-  return res.json() as Promise<T>
+  // Las funciones que devuelven void responden 204 sin cuerpo
+  const text = await res.text()
+  return (text ? JSON.parse(text) : null) as T
 }

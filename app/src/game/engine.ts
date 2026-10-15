@@ -1,4 +1,5 @@
-// Lógica pura del juego (sin React ni DOM) para poder testearla aparte.
+// Lógica pura del juego (sin React ni DOM). Es determinista: con la misma semilla y los mismos
+// toques sale exactamente la misma partida, así el servidor puede repetirla para verificarla.
 
 export type Kind =
   | 'jeet' // +10, abofetéalo
@@ -13,6 +14,7 @@ export interface Mole {
   id: number
   kind: Kind
   hp: number // golpes que faltan (la ballena necesita 3)
+  born: number // ms (tiempo de juego) en que apareció
   until: number // ms (tiempo de juego) en que se escapa
 }
 
@@ -27,6 +29,7 @@ export interface GameState {
   nextSpawn: number
   nextId: number
   pumpUntil: number // hasta cuándo dura el power-up PUMP
+  rng: number // estado del generador aleatorio (sale de la semilla)
   over: boolean
 }
 
@@ -44,9 +47,21 @@ export const PUMP_MS = 5_000
 export const CLOCK_MS = 3_000
 export const MAX_BONUS_MS = 9_000 // como mucho +9 s por relojes
 export const FINAL_MS = 5_000 // últimos 5 s: FINAL PUMP, puntos x2
+export const STEP_MS = 20 // el juego avanza siempre en pasos fijos de 20 ms
 
-export function newGame(): GameState {
+/** Generador pseudoaleatorio mulberry32: devuelve [número 0..1, nuevo estado]. */
+function nextRand(state: number): [number, number] {
+  const a = (state + 0x6d2b79f5) | 0
+  let t = Math.imul(a ^ (a >>> 15), 1 | a)
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+  return [((t ^ (t >>> 14)) >>> 0) / 4294967296, a]
+}
+
+export const randomSeed = () => Math.floor(Math.random() * 2 ** 32)
+
+export function newGame(seed: number = randomSeed()): GameState {
   return {
+    rng: seed | 0,
     elapsed: 0,
     duration: ROUND_MS,
     holes: Array(HOLES).fill(null),
@@ -119,10 +134,16 @@ function pickKind(elapsed: number, rand: () => number): Kind {
   return 'jeet'
 }
 
-/** Avanza el juego dt ms. Devuelve el nuevo estado y los eventos ocurridos. */
-export function tick(s: GameState, dt: number, rand: () => number = Math.random): [GameState, Event[]] {
+/** Avanza el juego un paso fijo (STEP_MS). Devuelve el nuevo estado y los eventos ocurridos. */
+export function tick(s: GameState, dt: number = STEP_MS): [GameState, Event[]] {
   if (s.over) return [s, []]
   const events: Event[] = []
+  let rng = s.rng
+  const rand = () => {
+    const [v, next] = nextRand(rng)
+    rng = next
+    return v
+  }
   const elapsed = Math.min(s.duration, s.elapsed + dt)
   let { score, streak, escaped, nextSpawn, nextId } = s
   const holes = s.holes.slice()
@@ -154,16 +175,50 @@ export function tick(s: GameState, dt: number, rand: () => number = Math.random)
         id: nextId++,
         kind,
         hp: kind === 'whale' ? 3 : 1,
-        until: elapsed + d.lifetime * LIFETIME_FACTOR[kind],
+        born: elapsed,
+        until: elapsed + Math.round(d.lifetime * LIFETIME_FACTOR[kind]),
       }
     }
-    nextSpawn = elapsed + d.spawnEvery
+    nextSpawn = elapsed + Math.round(d.spawnEvery)
   }
 
   return [
-    { ...s, elapsed, holes, score, streak, escaped, nextSpawn, nextId, over: elapsed >= s.duration },
+    { ...s, elapsed, holes, score, streak, escaped, nextSpawn, nextId, rng, over: elapsed >= s.duration },
     events,
   ]
+}
+
+/** Toque registrado: [ms de juego, casilla, 1 si lo hizo un dedo real (isTrusted) / 0 si fue código]. */
+export type Tap = [t: number, hole: number, trusted: 0 | 1]
+
+export interface ReplayResult {
+  state: GameState
+  /** Por cada toque sobre algo: qué era y cuánto tardó el jugador en reaccionar (ms). */
+  hits: { kind: Kind; reaction: number }[]
+  misses: number // toques en casillas vacías
+}
+
+/**
+ * Repite una partida completa a partir de la semilla y los toques.
+ * Los toques se aplican antes del paso cuyo tiempo coincide, igual que en el cliente.
+ */
+export function replay(seed: number, taps: Tap[]): ReplayResult {
+  let s = newGame(seed)
+  const hits: ReplayResult['hits'] = []
+  let misses = 0
+  let i = 0
+  while (!s.over) {
+    while (i < taps.length && taps[i][0] <= s.elapsed) {
+      const hole = taps[i][1]
+      const m = s.holes[hole]
+      if (m) hits.push({ kind: m.kind, reaction: s.elapsed - m.born })
+      else misses++
+      s = slap(s, hole)[0]
+      i++
+    }
+    s = tick(s)[0]
+  }
+  return { state: s, hits, misses }
 }
 
 /** El jugador toca un agujero. */

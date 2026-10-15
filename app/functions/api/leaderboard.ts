@@ -10,6 +10,7 @@ interface Row {
   name: string
   score: number
   community: boolean
+  verified: boolean
   checked_at: string | null
 }
 
@@ -54,7 +55,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     // No exponemos ids de Telegram ni fechas internas
     return json({
       ...board,
-      top: board.top.map(({ name, score, community }) => ({ name, score, community })),
+      top: board.top.map(({ name, score, community, verified }) => ({ name, score, community, verified })),
     })
   } catch (e) {
     console.error(e)

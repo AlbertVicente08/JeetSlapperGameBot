@@ -12,7 +12,7 @@
 | Juego en Telegram: 12 casillas, power-ups, bombas, FINAL PUMP | https://jeet-slapper.pages.dev/play/ |
 | Bot @JeetSlapperGameBot: botón "Jugar", `/start` con botones, foto de perfil, descripción | Telegram |
 | Ranking global con validación de Telegram (HMAC) | Supabase `players` |
-| Boost Comunidad x1,5 (estar en el canal) | ⚠️ inactivo hasta que el bot sea admin del canal |
+| Boost Comunidad x1,5 (estar en el canal principal @RealBertoBcn) | ✅ activo: el bot es admin del canal |
 | Anti-trampas: detector de bots en todas las partidas y repetición en el servidor para el top 3 (✅ verificada) | `app/server/anticheat.ts`, tabla `games` |
 | Apartado Wallet Phantom / Holder Boost (solo informativo, "próximamente") | Juego y landing |
 | Enlaces a canal, chat y X (@albertv_dev) | Juego, landing y bot |
@@ -24,7 +24,7 @@
 
 ## 🔴 Pendiente urgente (te toca a ti)
 
-- [ ] **Añadir @JeetSlapperGameBot como administrador del canal** `t.me/RealBertoBcn`, sin permisos. Sin esto el Boost Comunidad no funciona para nadie.
+- [x] **Añadir @JeetSlapperGameBot como administrador del canal** `t.me/RealBertoBcn` (hecho; si algún día lo quitas, el boost deja de funcionar).
 - [ ] **Copia de seguridad del código**: ahora solo está en tu PC. Crea un repositorio **privado** en GitHub y súbelo (yo lo preparo si me pasas el nombre).
 - [ ] **Guardar el `.env` en un gestor de contraseñas** (Bitwarden, 1Password…). Si pierdes el PC pierdes las claves.
 - [ ] **Jugar una partida desde el móvil** para probar en real el anti-trampas: todavía no hay ninguna partida registrada con el sistema nuevo.

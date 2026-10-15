@@ -7,6 +7,8 @@ interface TgWebApp {
   colorScheme?: 'light' | 'dark'
   ready(): void
   expand(): void
+  openTelegramLink?(url: string): void
+  openLink?(url: string): void
   HapticFeedback?: {
     impactOccurred(style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft'): void
     notificationOccurred(type: 'error' | 'success' | 'warning'): void
@@ -35,6 +37,14 @@ export function initTelegram() {
   if (!app) return
   app.ready()
   app.expand()
+}
+
+/** Abre un enlace: los t.me dentro de Telegram, el resto en el navegador. */
+export function openLink(url: string) {
+  const app = wa()
+  if (app?.openTelegramLink && url.startsWith('https://t.me/')) return app.openTelegramLink(url)
+  if (app?.openLink) return app.openLink(url)
+  window.open(url, '_blank', 'noopener')
 }
 
 export function playerName(): string {

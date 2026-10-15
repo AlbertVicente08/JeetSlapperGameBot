@@ -57,11 +57,16 @@ export function tier(elapsed: number): 0 | 1 | 2 {
 
 export const TIER_NAMES = ['Baby Jeets', 'Sniper Bots', 'Whale Season'] as const
 
+/** Puntos que se pierden cuando un jeet o una ballena se escapa. */
+export const ESCAPE_PENALTY = 5
+
 function difficulty(elapsed: number) {
   const t = Math.min(1, elapsed / ROUND_MS)
   return {
-    spawnEvery: 850 - 480 * t, // 850ms -> 370ms
-    lifetime: 1500 - 700 * t, // 1500ms -> 800ms
+    spawnEvery: 650 - 400 * t, // 650ms -> 250ms
+    lifetime: 1100 - 580 * t, // 1100ms -> 520ms
+    // A partir de Sniper Bots a veces salen dos a la vez
+    doubleChance: tier(elapsed) === 0 ? 0 : tier(elapsed) === 1 ? 0.25 : 0.45,
   }
 }
 
@@ -69,7 +74,9 @@ function pickKind(elapsed: number, rand: () => number): Kind {
   const r = rand()
   const lvl = tier(elapsed)
   if (lvl >= 1 && r < 0.12) return 'whale'
-  if (r < 0.32) return 'holder'
+  // Cada vez más diamond hands mezclados para que haya que mirar antes de pegar
+  const holderRate = [0.3, 0.38, 0.45][lvl]
+  if (r < 0.12 + holderRate) return 'holder'
   return 'jeet'
 }
 
@@ -78,17 +85,18 @@ export function tick(s: GameState, dt: number, rand: () => number = Math.random)
   if (s.over) return [s, []]
   const events: Event[] = []
   const elapsed = Math.min(ROUND_MS, s.elapsed + dt)
-  let { streak, escaped, nextSpawn, nextId } = s
+  let { score, streak, escaped, nextSpawn, nextId } = s
   const holes = s.holes.slice()
 
   // Los que se escapan
   holes.forEach((m, i) => {
     if (m && m.until <= elapsed) {
       holes[i] = null
-      // Dejar escapar a un holder está bien; dejar escapar a un jeet rompe la racha
+      // Dejar escapar a un holder está bien; dejar escapar a un jeet rompe la racha y resta
       if (m.kind !== 'holder') {
         streak = 0
         escaped++
+        score = Math.max(0, score - ESCAPE_PENALTY)
         events.push({ type: 'escape', hole: i })
       }
     }
@@ -96,22 +104,24 @@ export function tick(s: GameState, dt: number, rand: () => number = Math.random)
 
   // Aparecen nuevos
   if (elapsed >= nextSpawn) {
-    const free = holes.map((m, i) => (m ? -1 : i)).filter(i => i >= 0)
-    if (free.length) {
+    const d = difficulty(elapsed)
+    const count = rand() < d.doubleChance ? 2 : 1
+    for (let n = 0; n < count; n++) {
+      const free = holes.map((m, i) => (m ? -1 : i)).filter(i => i >= 0)
+      if (!free.length) break
       const hole = free[Math.floor(rand() * free.length)]
       const kind = pickKind(elapsed, rand)
-      const { lifetime } = difficulty(elapsed)
       holes[hole] = {
         id: nextId++,
         kind,
         hp: kind === 'whale' ? 3 : 1,
-        until: elapsed + (kind === 'whale' ? lifetime * 1.8 : lifetime),
+        until: elapsed + (kind === 'whale' ? d.lifetime * 1.8 : d.lifetime),
       }
     }
-    nextSpawn = elapsed + difficulty(elapsed).spawnEvery
+    nextSpawn = elapsed + d.spawnEvery
   }
 
-  return [{ ...s, elapsed, holes, streak, escaped, nextSpawn, nextId, over: elapsed >= ROUND_MS }, events]
+  return [{ ...s, elapsed, holes, score, streak, escaped, nextSpawn, nextId, over: elapsed >= ROUND_MS }, events]
 }
 
 /** El jugador toca un agujero. */

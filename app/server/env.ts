@@ -1,6 +1,7 @@
 // Variables de entorno de las Pages Functions (secretos en Cloudflare / .dev.vars en local).
 export interface Env {
   TELEGRAM_BOT_TOKEN: string
+  TELEGRAM_WEBHOOK_SECRET: string
   SUPABASE_URL: string
   SUPABASE_SERVICE_ROLE_KEY: string
 }

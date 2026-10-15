@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   comboMultiplier,
+  ESCAPE_PENALTY,
   newGame,
   slap,
   tick,
@@ -12,7 +13,8 @@ import {
   type Mole,
 } from './game/engine'
 import { setMuted, sfx } from './game/sound'
-import { haptic, initTelegram, inTelegram, playerName } from './telegram'
+import { haptic, initTelegram, inTelegram, openLink, playerName } from './telegram'
+import { HOLDER_TIERS, LINKS } from './community'
 import { fetchLeaderboard, submitScore, type Leaderboard, type SubmitResult } from './api'
 import './App.css'
 
@@ -69,6 +71,60 @@ function RankingTable({ board, status }: { board: Leaderboard | null; status: Lo
   )
 }
 
+function HolderInfo() {
+  return (
+    <div className="info">
+      <h3>👛 Wallet Phantom · Holder Boost</h3>
+      <p>
+        Cuando se lance <b>$JSLAP</b> podrás conectar tu wallet de Phantom. Si tienes tokens, tus puntos en el ranking
+        se multiplican:
+      </p>
+      <table>
+        <tbody>
+          {HOLDER_TIERS.map(t => (
+            <tr key={t.min}>
+              <td>{t.label}</td>
+              <td className="boost">{t.boost}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ul>
+        <li>Tienes que mantener los tokens al menos 1 hora para activar el boost.</li>
+        <li>Si vendes, el boost vuelve a x1 al momento.</li>
+        <li>Una wallet por cuenta de Telegram.</li>
+        <li>Si el token se gradúa en pump.fun, el Top 20 se reparte un bote del 1,5% del supply, en 3 pagos (33% / 33% / 34%) durante 48 h.</li>
+      </ul>
+      <button className="btn ghost" disabled>
+        CONECTAR PHANTOM · PRÓXIMAMENTE
+      </button>
+      <p className="warn">
+        ⚠️ El token aún no existe. Esto es lo previsto y puede cambiar. Las criptomonedas son de alto riesgo: no inviertas
+        lo que no puedas perder.
+      </p>
+    </div>
+  )
+}
+
+function CommunityLinks() {
+  return (
+    <div className="community">
+      <p>Únete a la comunidad</p>
+      <div className="links">
+        <button className="chip" onClick={() => openLink(LINKS.channel)}>
+          📣 Canal
+        </button>
+        <button className="chip" onClick={() => openLink(LINKS.chat)}>
+          💬 Chat
+        </button>
+        <button className="chip" onClick={() => openLink(LINKS.twitter)}>
+          𝕏 BertoBCN
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const FACE: Record<Mole['kind'], string> = { jeet: '🧻', holder: '💎', whale: '🐋' }
 const LABEL: Record<Mole['kind'], string> = { jeet: 'SELL', holder: 'HODL', whale: 'DUMP' }
 
@@ -113,6 +169,9 @@ export default function App() {
         setTimeout(() => setPopups(p => p.filter(x => x.id !== id)), 650)
       } else if (e.type === 'escape') {
         sfx.escape()
+        const id = ++popupId.current
+        setPopups(p => [...p, { id, hole: e.hole, text: `-${ESCAPE_PENALTY}`, bad: true }])
+        setTimeout(() => setPopups(p => p.filter(x => x.id !== id)), 650)
       }
     }
   }, [])
@@ -219,9 +278,12 @@ export default function App() {
             <li>
               <span>💎</span> Diamond hand: ¡no le pegues! (−25)
             </li>
+            <li>
+              <span>💨</span> Si un jeet se escapa: −{ESCAPE_PENALTY}
+            </li>
           </ul>
           <button className="btn" onClick={start}>
-            JUGAR
+            {inTelegram() ? 'JUGAR' : 'JUGAR DEMO'}
           </button>
           <button
             className="btn ghost"
@@ -230,11 +292,15 @@ export default function App() {
               void loadBoard()
             }}
           >
-            🏆 RANKING
+            🏆 MODO RANKING
           </button>
           <p className="muted">Récord: {best}</p>
-          <p className="demo">Modo demo: sin token, sin wallet. Solo diversión.</p>
-          {inTelegram() && <p className="muted">Hola, {playerName()}</p>}
+          {inTelegram() ? (
+            <p className="muted">Hola, {playerName()} · tus partidas cuentan para el ranking</p>
+          ) : (
+            <p className="demo">Modo demo: tus partidas no cuentan. Abre el juego en Telegram para competir.</p>
+          )}
+          <CommunityLinks />
         </section>
       )}
 
@@ -299,12 +365,19 @@ export default function App() {
             MENÚ
           </button>
           <RankingTable board={board} status={boardStatus} />
+          <CommunityLinks />
         </section>
       )}
 
       {screen === 'ranking' && (
         <section className="panel">
-          <h2 className="title small">🏆 RANKING</h2>
+          <h2 className="title small">🏆 MODO RANKING</h2>
+          <div className="info">
+            <p>
+              Compites contra todos los jugadores. Cuenta tu <b>mejor puntuación</b>. Solo cuentan las partidas jugadas
+              desde Telegram con tu cuenta.
+            </p>
+          </div>
           <RankingTable board={board} status={boardStatus} />
           {!inTelegram() && <p className="muted">Abre el juego en Telegram para entrar en el ranking.</p>}
           <button className="btn" onClick={start}>
@@ -313,6 +386,8 @@ export default function App() {
           <button className="btn ghost" onClick={() => setScreen('menu')}>
             MENÚ
           </button>
+          <HolderInfo />
+          <CommunityLinks />
         </section>
       )}
     </main>

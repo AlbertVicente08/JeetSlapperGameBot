@@ -18,6 +18,16 @@ npm run dev
 
 Abre http://localhost:5173 (mejor en vista móvil).
 
+## Publicar
+
+En producción: https://jeet-slapper.pages.dev (Cloudflare Pages, proyecto `jeet-slapper`). El bot es @JeetSlapperGameBot.
+
+```bash
+npm run deploy
+```
+
+La primera vez hay que hacer `npx wrangler login`.
+
 ## Estructura
 
 - `src/game/engine.ts`: lógica pura del juego (spawns, puntos, combo, niveles).

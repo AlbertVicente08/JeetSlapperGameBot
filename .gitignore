@@ -22,3 +22,6 @@ Thumbs.db
 # Restos de los agentes de Antigravity
 .agents/teamwork/victory_auditor_1/ts_check/node_modules/
 __pycache__/
+
+.dev.vars*
+!.dev.vars.example

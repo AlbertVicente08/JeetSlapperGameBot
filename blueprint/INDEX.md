@@ -57,7 +57,7 @@ c:\Users\alber\..Proyectos\crypto\blueprint\
     * Graduation Dynamics: Curve locks at **85.0 SOL raised** (~$69,000–$80,000 Market Cap), migrating to PumpSwap with LP tokens **burned irreversibly**.
     * Creator Rewards: creator fees according to the pump.fun / PumpSwap scheme active at launch (the old fixed 0.50 SOL graduation bonus no longer applies; verify on launch day).
   - **Retention & Anti-Dump Engine**:
-    * *On-Chain Holding Multiplier*: Connecting a wallet holding $\ge 100\text{k}\ \$JSLAP$ yields a $2.5\times$ leaderboard boost; $\ge 500\text{k}\ \$JSLAP$ yields a $5.0\times$ Chad multiplier (enforced by 1-hour continuous holding maturation and 1-to-1 unique wallet mapping). **Selling any tokens instantly resets the multiplier to 1.0x and slashes active competition scores**.
+    * *On-Chain Holding Multiplier*: Connecting a wallet holding $\ge 100\text{k}\ \$JSLAP$ yields a $2.5\times$ leaderboard boost; $\ge 500\text{k}\ \$JSLAP$ yields a $5.0\times$ Chad multiplier (enforced by 30-minute continuous holding maturation and 1-to-1 unique wallet mapping). **Selling any tokens instantly resets the multiplier to 1.0x and slashes active competition scores**.
     * *Graduation Jackpot Pool*: 15,000,000 tokens (1.50% of supply) locked in a Squads v4 multisig vault PDA, unlockable **only upon PumpSwap graduation at 85 SOL** via a **3-tier milestone vesting schedule (33% at migration, 33% at 24h, 34% at 48h conditioned on maintaining holding tier)** to eliminate post-migration dump traps.
     * *Telegram Referral Flywheel*: Referrers receive +20% stamina refills and a 10% passive share of friends' scores.
 
@@ -127,7 +127,7 @@ The following matrix maps every requirement (R1–R4) and acceptance criterion (
 | DEX Graduation Target            | 85.0 SOL raised on curve -> PumpSwap / AMM     |
 | Creator Incentives               | Native pump.fun graduation & fee-share rewards |
 | Community Prize Pool             | 15M tokens (Transparent public treasury)      |
-| Wallet Multipliers (Gamified)    | 2.5x (>=100k) / 5.0x (>=500k) (1h maturation)  |
+| Wallet Multipliers (Gamified)    | 2.5x (>=100k) / 5.0x (>=500k) (30m maturation) |
 | Selling Penalty (In-Game)        | Instant multiplier reset to 1.0x & score slash |
 | Telegram Referral Boost          | +20% Stamina Refill + 10% Passive Score Share  |
 | Primary Free AI Model            | Groq Llama 3.3 70B / 3.1 8B (Free Tier)        |

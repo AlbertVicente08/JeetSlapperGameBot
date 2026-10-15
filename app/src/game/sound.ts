@@ -42,6 +42,23 @@ export const sfx = {
     setTimeout(() => beep(660, 160, 'square', 990), 90)
   },
   wrong: () => beep(160, 260, 'sawtooth', 60, 0.1),
+  golden: () => {
+    beep(880, 70, 'square', 1320)
+    setTimeout(() => beep(1320, 70, 'square', 1760), 60)
+    setTimeout(() => beep(1760, 120, 'triangle', 2200), 120)
+  },
+  rug: () => {
+    beep(300, 500, 'sawtooth', 40, 0.14)
+    setTimeout(() => beep(90, 400, 'square', 30, 0.12), 80)
+  },
+  pump: () => {
+    beep(330, 250, 'square', 1320, 0.09)
+    setTimeout(() => beep(660, 200, 'square', 1760, 0.07), 180)
+  },
+  clock: () => {
+    beep(1000, 60, 'triangle')
+    setTimeout(() => beep(1400, 90, 'triangle'), 80)
+  },
   escape: () => beep(500, 120, 'triangle', 250, 0.05),
   start: () => {
     beep(440, 90)

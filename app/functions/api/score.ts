@@ -1,9 +1,9 @@
-// POST /api/score  { initData, score }  ->  { best, rank, improved }
+// POST /api/score  { initData, score }  ->  { best, ranked, rank, improved, community }
 import { json, rpc, type Env, type PagesFunction } from '../../server/env'
-import { verifyInitData } from '../../server/telegram'
+import { isChannelMember, verifyInitData } from '../../server/telegram'
 
-// Tope de cordura: con juego perfecto en 30 s rondan los ~2.000 puntos.
-const MAX_SCORE = 5_000
+// Tope de cordura (puntos sin boosts): con PUMP + FINAL PUMP + combo x3 un jeet vale hasta 120.
+const MAX_SCORE = 20_000
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   let body: { initData?: string; score?: number }
@@ -22,11 +22,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   try {
+    const member = await isChannelMember(env.TELEGRAM_BOT_TOKEN, user.id)
     const result = await rpc(env, 'submit_score', {
       p_telegram_id: user.id,
       p_username: user.username ?? null,
       p_first_name: user.first_name ?? null,
       p_score: score,
+      p_member: member,
     })
     return json(result)
   } catch (e) {

@@ -64,14 +64,22 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 9px;
-  line-height: 2.4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  font-size: 7px;
+  line-height: 1.6;
   text-align: left;
+  max-width: 340px;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
 }
 
 .legend span {
-  font-size: 18px;
-  vertical-align: middle;
+  font-size: 16px;
   margin-right: 6px;
 }
 
@@ -311,13 +319,13 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 6px;
 }
 
 .hole {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 0.9;
   background: #120b22;
   border: 2px solid #34245a;
   box-shadow: inset 0 -10px 0 #08050f;
@@ -343,19 +351,72 @@
 }
 
 .face {
-  font-size: 40px;
+  font-size: 34px;
   line-height: 1;
 }
 
 .tag {
-  font-size: 8px;
+  font-size: 7px;
   padding: 3px 5px;
 }
 
 .jeet .tag { background: var(--red); }
 .holder .tag { background: var(--green); color: #000; }
 .whale .tag { background: var(--pink); }
-.whale .face { font-size: 48px; }
+.whale .face { font-size: 42px; }
+.golden .tag { background: var(--gold); color: #000; }
+.golden .face { animation: spin 0.4s linear infinite; }
+.rug .tag { background: #000; color: var(--red); border: 1px solid var(--red); }
+.rug .face { animation: tremble 0.15s infinite; }
+.pump .tag { background: var(--cyan); color: #000; }
+.clock .tag { background: #fff; color: #000; }
+
+@keyframes spin {
+  50% { transform: scaleX(-1); }
+}
+
+@keyframes tremble {
+  25% { transform: translate(-1px, 1px) rotate(-6deg); }
+  75% { transform: translate(1px, -1px) rotate(6deg); }
+}
+
+/* Efectos de pantalla */
+.flash-rug { box-shadow: inset 0 0 0 999px rgba(255, 40, 40, 0.25); }
+.flash-pump { box-shadow: inset 0 0 0 999px rgba(34, 230, 255, 0.18); }
+.flash-gold { box-shadow: inset 0 0 0 999px rgba(255, 210, 63, 0.2); }
+
+.hotgrid .hole {
+  border-color: var(--gold);
+}
+
+.final,
+.pumping {
+  font-size: 11px;
+  animation: blink 0.4s steps(2) infinite;
+}
+
+.final { color: var(--red); }
+.pumping { color: var(--gold); }
+
+/* Boost comunidad */
+.boostcard {
+  border-color: var(--cyan);
+}
+
+.boostcard.on {
+  border-color: var(--green);
+}
+
+.boostcard .row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  margin-left: 6px;
+  font-size: 10px;
+}
 
 .hp {
   font-size: 8px;

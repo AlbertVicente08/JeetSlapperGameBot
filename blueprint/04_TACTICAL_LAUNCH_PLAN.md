@@ -186,7 +186,7 @@ MC: $4k - $16k        MC: $16k - $32k        MC: $32k - $52k        MC: $52k - $
 | **Early Sniper Whale Dump** | An early buyer sells 1.0 SOL, causing a temporary 15% price drop. | 1. Sarcastic AI bot immediately roasts the seller in Telegram: *"🚨 JEET DETECTED: Sold for lunch money. Your multiplier is wiped!"*<br>2. Remind community that the dev has not sold a single token and that a lower entry price allows new diamond hands to acquire cheap bags. |
 | **Copycat / Vampire Token Launch** | A bad actor deploys a fake `$JSLAP` token on pump.fun attempting to hijack search traffic. | 1. The Telegram bot pins a bold security warning with the verified Mint Address and a direct 1-tap link.<br>2. Report the fake token on pump.fun.<br>3. Community executes a "Slap the Copycat" raid on the imposter's comment section. |
 | **FUD in Telegram Chat** | Trolls post "dev will dump" or "project is dead". | 1. Automate `@RoseBot` blacklisting of trigger phrases.<br>2. Trigger `/roast` command targeting the FUDder, letting the AI roast their low-effort trolling.<br>3. Pin the on-chain Solscan link displaying the developer wallet holding exactly 1.742%. |
-| **Post-Migration Dump Trap & Front-Running** | Whales dump at 80–84 SOL anticipating a sudden 15M jackpot dump upon PumpSwap graduation. | 1. Implement 3-tier milestone vesting (33% at migration, 33% at 24h, 34% at 48h conditioned on holding tier). Initial PumpSwap price impact is capped under 3.8%.<br>2. Enforce 1-hour holding maturation and final migration snapshot so snipers cannot Sybil-pass bags.<br>3. Any token sell during the 48h window forfeits unvested tranches to on-chain burn. |
+| **Post-Migration Dump Trap & Front-Running** | Whales dump at 80–84 SOL anticipating a sudden 15M jackpot dump upon PumpSwap graduation. | 1. Implement 3-tier milestone vesting (33% at migration, 33% at 24h, 34% at 48h conditioned on holding tier). Initial PumpSwap price impact is capped under 3.8%.<br>2. Enforce 30-minute holding maturation and final migration snapshot so snipers cannot Sybil-pass bags.<br>3. Any token sell during the 48h window forfeits unvested tranches to on-chain burn. |
 | **Solana Network Congestion** | Priority fees spike, causing transaction confirmation delays. | 1. The `ResilientSolanaConnection` automatically shifts RPC calls to backup endpoints.<br>2. In-game scores and balance verifications are buffered in client-side storage and retried via exponential backoff. |
 
 ---
@@ -210,8 +210,10 @@ To establish long-term community confidence and eliminate fear of developer rug 
 ```markdown
 ### LAUNCH READINESS CHECKLIST:
 - [ ] 0.7143 SOL loaded into clean dev wallet (100.00€ @ 140€/SOL).
-- [ ] Next.js 14 Telegram Mini App deployed on Cloudflare (0.00€/month verified).
-- [ ] Telegram Bot created via @BotFather and webhook registered.
+- [x] Telegram Mini App deployed on Cloudflare Pages: game at https://jeet-slapper.pages.dev/play/ (0.00€/month).
+- [x] Landing page live at https://jeet-slapper.pages.dev — use it as the **Website** field when creating the token on pump.fun (plus Telegram `t.me/RealBertoBcn` and X `@albertv_dev`).
+- [x] Telegram Bot created via @BotFather and webhook registered.
+- [ ] After launch: publish the CA on the landing page and pinned in the channel (the only official sources).
 - [ ] Free API keys active: Groq Cloud, Google Gemini, Helius, QuickNode, Upstash, Supabase.
 - [ ] IPFS metadata uploaded with high-res token icon and banner.
 - [ ] Atomic Create + Buy script tested and ready for single-block execution.

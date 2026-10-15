@@ -3,16 +3,134 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Jeet Slapper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeet Slapper ($JSLAP) · Abofetea a los jeets</title>
+    <meta name="description" content="Jeet Slapper: un juego arcade en Telegram con ranking global. Abofetea a los jeets, no toques a los diamond hands. Comunidad de BertoBCN." />
+    <meta property="og:title" content="Jeet Slapper ($JSLAP)" />
+    <meta property="og:description" content="Juego arcade en Telegram con ranking global y boosts para la comunidad." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jeet-slapper.pages.dev/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@albertv_dev" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-    <!-- SDK oficial de Telegram Mini Apps. Fuera de Telegram no hace nada. -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <script>
+      // Si se abre dentro de Telegram (Mini App), ir directamente al juego
+      if (/[#&]tgWebAppData=/.test(location.hash)) location.replace('/play/' + location.hash)
+    </script>
+    <link rel="stylesheet" href="/src/landing.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <header class="nav">
+      <a class="logo" href="/">JEET<span>SLAPPER</span></a>
+      <nav>
+        <a href="#juego">Juego</a>
+        <a href="#boosts">Boosts</a>
+        <a href="#token">Token</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="kicker">Un juego arcade en Telegram</p>
+        <h1>Deja de mirar las velas rojas.<br /><em>Abofetea a los jeets.</em></h1>
+        <p class="lead">
+          Rondas de 30 segundos. Pega a los que venden, tumba a las ballenas y <b>no toques a los diamond hands</b>.
+          Ranking global con boosts para la comunidad.
+        </p>
+        <div class="ctas">
+          <a class="btn primary" href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">🎮 Jugar en Telegram</a>
+          <a class="btn" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Unirme a la comunidad</a>
+        </div>
+        <p class="note">Gratis · sin descargar nada · funciona en el móvil</p>
+        <div class="board" aria-hidden="true">
+          <span>🧻</span><span class="empty"></span><span>💎</span>
+          <span class="empty"></span><span>🐋</span><span>🚀</span>
+          <span>🪙</span><span class="empty"></span><span>💣</span>
+        </div>
+      </section>
+
+      <section id="juego">
+        <h2>Cómo se juega</h2>
+        <div class="cards">
+          <article>
+            <div class="big">👋</div>
+            <h3>Pega rápido</h3>
+            <p>🧻 Jeets +10 · 🪙 jeet dorado +50 · 🐋 ballenas en 3 golpes. Encadena aciertos para subir el combo hasta x3.</p>
+          </article>
+          <article>
+            <div class="big">⚠️</div>
+            <h3>Cuidado con lo que tocas</h3>
+            <p>💎 Diamond hand −25 · 💣 rug pull −50 y te limpia el tablero · cada jeet que se escapa −5.</p>
+          </article>
+          <article>
+            <div class="big">🚀</div>
+            <h3>Power-ups</h3>
+            <p>🚀 PUMP: puntos x2 durante 5 s · ⏱️ +3 segundos · 🔥 los últimos 5 s son FINAL PUMP x2.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="boosts">
+        <h2>Boosts del ranking</h2>
+        <p class="sub">Tu mejor partida se multiplica según tus boosts. Se suman entre sí.</p>
+        <div class="cards two">
+          <article class="live">
+            <span class="pill">ACTIVO YA</span>
+            <h3>📣 Boost Comunidad · x1,5</h3>
+            <p>Únete al canal de BertoBCN y tu récord cuenta <b>x1,5</b>. Si te sales del canal, pierdes el boost.</p>
+            <a class="btn small" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">Unirme al canal</a>
+          </article>
+          <article>
+            <span class="pill soon">PRÓXIMAMENTE</span>
+            <h3>👛 Holder Boost · hasta x5</h3>
+            <p>Conecta tu wallet de Phantom cuando exista el token:</p>
+            <ul>
+              <li>≥ 100.000 $JSLAP → <b>x2,5</b></li>
+              <li>≥ 500.000 $JSLAP → <b>x5</b></li>
+              <li>Hay que mantenerlos <b>30 minutos</b> para activarlo.</li>
+              <li>Si vendes, vuelve a x1 al momento.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="empezar">
+        <h2>Empieza en 3 pasos</h2>
+        <ol class="steps">
+          <li><b>Abre el bot</b> <a href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">@JeetSlapperGameBot</a> y pulsa <b>Jugar</b>.</li>
+          <li><b>Únete al canal</b> <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> para activar el x1,5.</li>
+          <li><b>Sube en el ranking</b> y entra al <a href="https://t.me/+aGQnR6gxz_oxNWY0" target="_blank" rel="noopener">chat</a> a presumir de récord.</li>
+        </ol>
+      </section>
+
+      <section id="token" class="token">
+        <h2>El token $JSLAP</h2>
+        <p>
+          $JSLAP se lanzará en <b>pump.fun</b> (Solana), sin impuestos y de forma abierta para todos. Servirá para activar el
+          Holder Boost del juego.
+        </p>
+        <p class="alert">
+          🔒 La dirección del contrato (CA) <b>solo</b> se publicará en el canal oficial
+          <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> y en esta web. Cualquier otra
+          es falsa. Nadie del equipo te escribirá primero por privado.
+        </p>
+        <p class="risk">
+          ⚠️ Aviso de riesgo: las criptomonedas, y en especial las memecoins, son extremadamente volátiles. La mayoría pierden
+          todo su valor. Esto no es asesoramiento financiero. No compres lo que no puedas permitirte perder.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Un proyecto de <b>BertoBCN</b>, construido en público.</p>
+      <div class="links">
+        <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Canal</a>
+        <a href="https://t.me/+aGQnR6gxz_oxNWY0" target="_blank" rel="noopener">💬 Chat</a>
+        <a href="https://x.com/albertv_dev" target="_blank" rel="noopener">𝕏 @albertv_dev</a>
+        <a href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">🎮 Bot</a>
+      </div>
+    </footer>
   </body>
 </html>

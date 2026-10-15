@@ -3,19 +3,22 @@ import { initData } from './telegram'
 
 export interface Ranked {
   name: string
-  score: number
+  score: number // puntuación del ranking (récord x boost)
+  community: boolean // tiene el Boost Comunidad
 }
 
 export interface Leaderboard {
   top: Ranked[]
-  me: { best: number; rank: number } | null
+  me: { best: number; ranked: number; rank: number; community: boolean } | null
   players: number
 }
 
 export interface SubmitResult {
-  best: number
+  best: number // récord sin boosts
+  ranked: number // récord x boost
   rank: number
   improved: boolean
+  community: boolean
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {

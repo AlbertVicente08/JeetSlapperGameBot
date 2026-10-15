@@ -2,20 +2,20 @@
 // Telegram envía la cabecera X-Telegram-Bot-Api-Secret-Token con el secreto registrado en setWebhook.
 import { json, type Env, type PagesFunction } from '../../server/env'
 
-const GAME_URL = 'https://jeet-slapper.pages.dev'
+const GAME_URL = 'https://jeet-slapper.pages.dev/play/'
 const LINKS = {
   channel: 'https://t.me/RealBertoBcn',
   chat: 'https://t.me/+aGQnR6gxz_oxNWY0',
-  twitter: 'https://x.com/BertoBCN',
+  twitter: 'https://x.com/albertv_dev',
 }
 
 const WELCOME = [
   '👋 <b>Bienvenido a Jeet Slapper</b>',
   '',
   'Abofetea a los jeets 🧻, tumba a las ballenas 🐋 y <b>no toques a los diamond hands</b> 💎.',
-  'Rondas de 30 segundos y ranking global.',
+  'Rondas de 30 segundos, power-ups 🚀, bombas 💣 y ranking global.',
   '',
-  '📣 Únete a la comunidad de BertoBCN para enterarte de los torneos y novedades.',
+  '📣 <b>Boost Comunidad x1,5</b>: si estás en el canal de BertoBCN, tu récord cuenta x1,5 en el ranking. Si te sales, lo pierdes.',
 ].join('\n')
 
 interface Update {

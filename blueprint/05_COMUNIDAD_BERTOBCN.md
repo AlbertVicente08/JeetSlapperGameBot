@@ -1,7 +1,7 @@
 # Crear y hacer crecer la comunidad de BertoBCN
 
 **Fecha**: 2026-10-15
-**Punto de partida**: X/Twitter `@BertoBCN` (≈0 seguidores), canal de Telegram [t.me/RealBertoBcn](https://t.me/RealBertoBcn), chat de debate enlazado y un primer proyecto en marcha: el juego **Jeet Slapper** ([@JeetSlapperGameBot](https://t.me/JeetSlapperGameBot)).
+**Punto de partida**: X/Twitter **BertoBCN** (`@albertv_dev`) (≈0 seguidores), canal de Telegram [t.me/RealBertoBcn](https://t.me/RealBertoBcn), chat de debate enlazado y un primer proyecto en marcha: el juego **Jeet Slapper** ([@JeetSlapperGameBot](https://t.me/JeetSlapperGameBot)).
 
 ---
 
@@ -13,7 +13,7 @@
    X / Twitter  ──────►  Telegram  ──────►  Tus proyectos
   (descubrimiento)     (relación)          (valor + ingresos)
 
-  @BertoBCN             Canal: lo que tú    Jeet Slapper (juego + ranking)
+  BertoBCN              Canal: lo que tú    Jeet Slapper (juego + ranking)
   - respuestas          publicas            Futuro: token, bots, herramientas,
   - clips del juego     Chat: la gente      patrocinios, afiliados...
   - build in public     habla contigo
@@ -44,7 +44,7 @@ Por qué funciona:
 
 ## 2. Montar los perfiles (día 1)
 
-### X / Twitter `@BertoBCN`
+### X / Twitter: BertoBCN (`@albertv_dev`)
 - **Foto**: tu cara o un avatar fijo y reconocible. La misma foto en X y en Telegram.
 - **Nombre**: `Berto · BCN 🛠️` (o similar).
 - **Bio**, por ejemplo: *"Construyo proyectos cripto + IA en público 🇪🇸 | Ahora: Jeet Slapper, un juego en Telegram 🎮 | Todo el proceso, con números 👇"*
@@ -127,7 +127,7 @@ Ya funciona así:
 
 Siguientes ideas (por orden de impacto):
 1. **Torneo semanal**: el top 3 del domingo sale en el canal (más adelante, con un pequeño premio).
-2. **Compartir récord**: un botón que genera una imagen con tu puntuación para publicarla en X con `@BertoBCN`. Cada récord compartido es publicidad gratis.
+2. **Compartir récord**: un botón que genera una imagen con tu puntuación para publicarla en X mencionando a `@albertv_dev`. Cada récord compartido es publicidad gratis.
 3. **Recompensa por unirse**: un skin o una ronda extra si te unes al canal (el bot puede comprobarlo si es administrador del canal).
 4. **Invita a un amigo**: enlace personal; si tu amigo juega, ganas algo dentro del juego.
 

@@ -17,7 +17,7 @@
 This document details the complete project blueprint:
 1. **Brand Identity & Viral Narrative Lore**: Cyberpunk arcade aesthetic, Twitter/X memetic storytelling, and visual styling.
 2. **On-Chain Bonding Curve Tokenomics**: Mathematical model governing the 1,000,000,000 $JSLAP supply, 80% bonding curve allocation, 0.50 SOL genesis dev buy (1.742% of supply), 0% transaction taxes, 85 SOL graduation dynamics, irreversible LP burn, and post-migration creator revenue streams.
-3. **The Anti-Dump Retention & Utility Engine**: Real-time on-chain wallet balance verification, 1-to-1 unique wallet mapping, 1-hour continuous holding maturation, tiered score multipliers (up to 5.0x), instantaneous penalty resets upon token sales, a 1.5% Graduation Jackpot in a Squads v4 vault with 3-tier milestone vesting (33%/33%/34%), and a self-propagating Telegram referral flywheel.
+3. **The Anti-Dump Retention & Utility Engine**: Real-time on-chain wallet balance verification, 1-to-1 unique wallet mapping, 30-minute continuous holding maturation, tiered score multipliers (up to 5.0x), instantaneous penalty resets upon token sales, a 1.5% Graduation Jackpot in a Squads v4 vault with 3-tier milestone vesting (33%/33%/34%), and a self-propagating Telegram referral flywheel.
 
 ---
 
@@ -181,7 +181,7 @@ The primary reason 98% of pump.fun projects perish within 24 hours is the lack o
 │   │   --> 2.5x Multiplier     │                 │   (Squads v4 Multisig PDA) │   │
 │   │ • Hold >= 500k $JSLAP     │  Collaborative  │ • Top 20 Leaderboard Win   │   │
 │   │   --> 5.0x Multiplier     │  Graduation Push│ • 3-Tier Milestone Vesting:│   │
-│   │ • 1h Holding Maturation   ├────────────────►│   - 33% at Migration       │   │
+│   │ • 30m Holding Maturation  ├────────────────►│   - 33% at Migration       │   │
 │   │ • 1-to-1 Unique Mapping   │                 │   - 33% at T+24h (Hold req)│   │
 │   │ • SELL ANY TOKENS?        │                 │   - 34% at T+48h (Hold req)│   │
 │   │   --> Instant 1.0x Reset! │                 │ • Prevents Post-DEX Dump!  │   │
@@ -209,14 +209,14 @@ Inside the Telegram Mini App, players link their Solana public address via Sign-
 | Tier Name | Minimum $JSLAP Balance | Score Multiplier | In-Game Visual & Audio Perks | Anti-Dump & Anti-Sybil Rule |
 | :--- | :--- | :---: | :--- | :--- |
 | **Normie / Paper Hand** | 0 to 99,999 $JSLAP | **1.0x** | Standard slapping hand; standard slap sounds. | None. |
-| **Jeet Slayer** | 100,000 $JSLAP (~$7–$15) | **2.5x** | Cyber Neon Knuckles; custom slap VFX; access to daily leaderboards. | **1h holding maturation; instant reset to 1.0x if wallet sells $\ge 1$ token.** |
-| **Diamond Hand Chad** | 500,000 $JSLAP (~$35–$75) | **5.0x** | Golden Slap Gauntlet; explosion sound effects; private Chad Telegram badge. | **1h holding maturation; instant reset to 1.0x if wallet sells $\ge 1$ token.** |
+| **Jeet Slayer** | 100,000 $JSLAP (~$7–$15) | **2.5x** | Cyber Neon Knuckles; custom slap VFX; access to daily leaderboards. | **30-min holding maturation; instant reset to 1.0x if wallet sells $\ge 1$ token.** |
+| **Diamond Hand Chad** | 500,000 $JSLAP (~$35–$75) | **5.0x** | Golden Slap Gauntlet; explosion sound effects; private Chad Telegram badge. | **30-min holding maturation; instant reset to 1.0x if wallet sells $\ge 1$ token.** |
 
 #### Anti-Sybil & Holding Integrity Rules
 1. **1-to-1 Unique Wallet-to-Telegram ID Mapping**:
    To prevent whales from linking a single token bag across 20 Telegram accounts to dominate the leaderboard (Sybil attack), the database enforces a strict relational unique constraint: `UNIQUE(solana_wallet_address)`. A Solana address can only be linked to a single active Telegram user ID. Any secondary binding attempt returns HTTP 409 Conflict.
-2. **1-Hour Continuous Holding Maturation Window**:
-   To eliminate flash-holding / bag-passing attacks (where an attacker buys tokens, slaps with 5.0x multiplier, and immediately transfers the tokens to another wallet to repeat), tier multipliers do **not** activate immediately. The player's address must have held $\ge 100\text{k}$ or $\ge 500\text{k}\ \$JSLAP$ continuously for **at least 1 full hour (3,600 seconds)** before the multiplier applies to gameplay sessions.
+2. **30-Minute Continuous Holding Maturation Window**:
+   To eliminate flash-holding / bag-passing attacks (where an attacker buys tokens, slaps with 5.0x multiplier, and immediately transfers the tokens to another wallet to repeat), tier multipliers do **not** activate immediately. The player's address must have held $\ge 100\text{k}$ or $\ge 500\text{k}\ \$JSLAP$ continuously for **at least 30 minutes (1,800 seconds)** before the multiplier applies to gameplay sessions.
 3. **The Penalty Reset Mechanism**:
    - The backend runs a lightweight verification routine (`verifyUserTokenBalance`) when a player submits a score session.
    - If the on-chain balance drops below the active tier threshold (indicating the player sold or transferred tokens):
@@ -334,7 +334,7 @@ After each session, players can tap **"Share to X"**:
 | **Dev Credibility Zone** | 1.5% to 3.0% (optimal anti-rug score on BullX, Photon, BubbleMaps) |
 | **Graduation Trigger** | 85.0 SOL deposited on bonding curve (~$69,000–$80,000 Market Cap) |
 | **Creator Reward** | Creator fees per the pump.fun / PumpSwap scheme active at launch (verify on launch day; no fixed 0.5 SOL bonus) |
-| **Holding Multipliers** | $\ge 100\text{k tokens} \rightarrow 2.5\times$; $\ge 500\text{k tokens} \rightarrow 5.0\times$ (1h continuous holding maturation; 1-to-1 wallet mapping; instant reset to 1.0x on sell) |
+| **Holding Multipliers** | $\ge 100\text{k tokens} \rightarrow 2.5\times$; $\ge 500\text{k tokens} \rightarrow 5.0\times$ (30-min continuous holding maturation; 1-to-1 wallet mapping; instant reset to 1.0x on sell) |
 | **Migration Jackpot** | 15,000,000 tokens (1.5% supply) escrowed in Squads v4 PDA; 3-tier milestone vesting (33% migration, 33% at T+24h, 34% at T+48h conditioned on holding tier) |
 | **Referral Flywheel** | +20% Stamina refill + 10% passive score share per referred user |
 

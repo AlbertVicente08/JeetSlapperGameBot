@@ -26,6 +26,28 @@ function safeEqual(a: string, b: string): boolean {
   return diff === 0
 }
 
+/** Canal de la comunidad: estar dentro da el Boost Comunidad. El bot debe ser administrador del canal. */
+export const COMMUNITY_CHANNEL = '@RealBertoBcn'
+
+/**
+ * ¿Está el usuario en el canal? true/false, o null si Telegram no lo pudo comprobar
+ * (por ejemplo, si el bot no es administrador del canal).
+ */
+export async function isChannelMember(botToken: string, userId: number): Promise<boolean | null> {
+  try {
+    const url = `https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${encodeURIComponent(COMMUNITY_CHANNEL)}&user_id=${userId}`
+    const res = await fetch(url)
+    const data = (await res.json()) as { ok: boolean; result?: { status: string; is_member?: boolean } }
+    if (!data.ok || !data.result) return null
+    const { status, is_member } = data.result
+    if (status === 'creator' || status === 'administrator' || status === 'member') return true
+    if (status === 'restricted') return !!is_member
+    return false
+  } catch {
+    return null
+  }
+}
+
 /**
  * Devuelve el usuario si el initData es auténtico y reciente; si no, null.
  * maxAgeSec: antigüedad máxima de auth_date (por defecto 24 h).

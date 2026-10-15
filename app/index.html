@@ -46,7 +46,6 @@
         </p>
         <div class="ctas">
           <a class="btn primary" href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">🎮 Play &amp; Win on Telegram</a>
-          <a class="btn" href="#token">🪙 $JSLAP Token &amp; CA</a>
           <a class="btn" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Community (x1.5 Boost)</a>
         </div>
         <p class="note">100% Free to play · Connect Phantom to unlock ranked mode &amp; Holder Boost</p>
@@ -174,25 +173,8 @@
           Holding $JSLAP powers your in-game <b>Holder Multiplier (up to x5.0 on all tournament scores)</b>, unlocks the exclusive <b>Golden Gauntlet</b> skin, and secures your share of weekly and monthly tournament cash prizes paid directly to your linked Phantom wallet.
         </p>
 
-        <div class="ca-container">
-          <div class="ca-header">
-            <span>OFFICIAL CONTRACT ADDRESS (CA)</span>
-            <span class="ca-status" id="ca-status-badge" style="color:var(--green)">🟢 LIVE ON PUMP.FUN</span>
-          </div>
-          <div class="ca-box">
-            <code id="ca-address">Contract address posted in t.me/RealBertoBcn</code>
-            <button id="ca-copy-btn" class="btn small ca-btn" onclick="copyContractAddress()">Copy CA</button>
-          </div>
-          <div class="ca-links" id="ca-links-row" style="display:flex;">
-            <a id="ca-pump-link" class="btn small primary" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">Buy on pump.fun ↗</a>
-            <a id="ca-dex-link" class="btn small" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">DexScreener ↗</a>
-          </div>
-        </div>
-
         <p class="alert">
-          🔒 <b>Security Notice</b>: The official Contract Address (CA) is published <b>only</b> in the official channel
-          <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> and on this website. Any other
-          address is a scam. Nobody from the team will ever DM you first.
+          🔒 <b>Official Contract Address (CA)</b>: The original and only official contract address is posted on our official X (Twitter) account <a href="https://x.com/JeetSlapperGame" target="_blank" rel="noopener"><b>@JeetSlapperGame</b></a> and in our Telegram channel <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener"><b>t.me/RealBertoBcn</b></a>. Always check there for the authentic CA. Any other address or account is a fake copycat. Nobody from the team will ever DM you first.
         </p>
         <p class="risk">
           ⚠️ <b>Risk Warning</b>: Crypto-assets and memecoins are extremely volatile. Most pump.fun tokens lose value.
@@ -213,42 +195,5 @@
         <a href="/privacy/">🔐 Privacy</a>
       </div>
     </footer>
-
-    <script>
-      function copyContractAddress() {
-        const el = document.getElementById('ca-address');
-        const text = el ? el.innerText.trim() : '';
-        if (!text || text.includes('Announcing')) return;
-        navigator.clipboard.writeText(text).then(() => {
-          const btn = document.getElementById('ca-copy-btn');
-          if (btn) {
-            const old = btn.innerText;
-            btn.innerText = 'Copied! ✓';
-            setTimeout(() => { btn.innerText = old; }, 2000);
-          }
-        });
-      }
-
-      fetch('/api/curve')
-        .then(r => r.json())
-        .then(data => {
-          if (data && data.live && data.mint) {
-            const pill = document.getElementById('token-status-pill');
-            const badge = document.getElementById('ca-status-badge');
-            const caEl = document.getElementById('ca-address');
-            const linksRow = document.getElementById('ca-links-row');
-            const pumpLink = document.getElementById('ca-pump-link');
-            const dexLink = document.getElementById('ca-dex-link');
-
-            if (pill) { pill.innerText = 'LIVE ON PUMP.FUN'; pill.className = 'pill'; }
-            if (badge) { badge.innerText = '🟢 LIVE ON PUMP.FUN'; badge.style.color = 'var(--green)'; }
-            if (caEl) caEl.innerText = data.mint;
-            if (linksRow) linksRow.style.display = 'flex';
-            if (pumpLink) pumpLink.href = 'https://pump.fun/coin/' + data.mint;
-            if (dexLink) dexLink.href = 'https://dexscreener.com/solana/' + data.mint;
-          }
-        })
-        .catch(() => {});
-    </script>
   </body>
 </html>

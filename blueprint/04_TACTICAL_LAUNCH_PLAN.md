@@ -34,7 +34,7 @@ The table below details the exact allocation across all four required operationa
 | ↳ *Pump.fun Platform Fee (1.00%)* | *0.005000000 SOL* | *0.70 €* | *5,000,000* | *0.70%* | Protocol swap fee deducted and routed to pump.fun fee recipient. |
 | ↳ *Net SOL Added to Curve ($V_{\text{sol}}$)* | *0.495000000 SOL* | *69.30 €* | *495,000,000* | *69.30%* | Deposits into curve, acquiring **17,417,117.56 $JSLAP tokens (1.742% of 1B supply)**. |
 | **3. Network Gas & Priority Fee Buffer** | **0.030000000 SOL** | 4.20 € | 30,000,000 | 4.20% | Base transaction fee (5,000 lamports) + Compute Budget Priority Fees (100,000 micro-lamports/CU) for creation tx + buffer for 50–100 post-launch administrative transactions. |
-| **4. Operational Treasury & Cushion** | **0.164285714 SOL** | 23.00 € | 164,285,714 | 23.00% | Unallocated wallet cushion: emergency priority fee spikes, community micro-bounties for top raiders, and unexpected network congestion buffer. |
+| **4. Operational Treasury & Cushion** | **0.164285714 SOL** | 23.00 € | 164,285,714 | 23.00% | Unallocated wallet cushion: emergency priority fee spikes, community micro-prizes for game tournaments, and unexpected network congestion buffer. |
 | **TOTAL DEPLOYED BUDGET** | **0.714285714 SOL** | **100.00 €** | **714,285,714** | **100.00%** | **Full 100€ capital accounted for with 0.00€ unbudgeted waste.** |
 
 ### 1.2 Price Sensitivity Matrix Across Exchange Environments
@@ -65,8 +65,8 @@ Because the EUR/SOL spot price fluctuates in live markets, the execution strateg
 ┌─────────────────┐         ┌─────────────────┐        ┌─────────────────┐    ┌─────────────────┐  ┌──────────────────┐
 │ INFRA FREEZE    │         │ PUBLIC BETA     │        │ PUBLIC TG OPEN  │    │ LIVE VOICE AMA  │  │ ATOMIC DEPLOY    │
 │ • CF Pages      │────────►│ • Open Demo     │───────►│ • Master Lore   │───►│ • Music / Hype  │─►│ • Single Tx Buy  │
-│ • TG Bot Hook   │         │ • Raid Toolkit  │        │ • Bot Open      │    │ • Wallet Ready  │  │ • 1-Sec CA Blast │
-│ • Multi-RPC Test│         │ • Private Test  │        │ • X Thread #1   │    │ • Final Checks  │  │ • Community Raid │
+│ • TG Bot Hook   │         │ • Meme Toolkit  │        │ • Bot Open      │    │ • Wallet Ready  │  │ • 1-Sec CA Blast │
+│ • Multi-RPC Test│         │ • Bug Reports   │        │ • X Thread #1   │    │ • Final Checks  │  │ • Official posts │
 └─────────────────┘         └─────────────────┘        └─────────────────┘    ┌─────────────────┐  └──────────────────┘
 ```
 
@@ -79,7 +79,7 @@ Because the EUR/SOL spot price fluctuates in live markets, the execution strateg
 - **T-36h: Visual Creative Production & Meme Suite**:
   - Generate 15 high-engagement meme assets (cartoon jeets being slapped, Wojak red candle despair vs. Chad golden gauntlet) using free tools (Ideogram, Recraft.ai).
   - Package an official Telegram Sticker Pack (`t.me/addstickers/JeetSlapperMemes`).
-  - Configure the `@JeetSlapperBot` profile, welcome banner, and description.
+  - Configure the `@JeetSlapperGameBot` profile, welcome banner, and description.
 - **T-24h: Public Beta & Community Testing (100% Fair Launch — Cumplimiento MiCA/UE)**:
   - En lugar de crear grupos cerrados u opacos de "insiders" (que bajo las leyes europeas MiCA pueden considerarse manipulación de mercado o concertación de pump-and-dump), se abre una **beta pública y transparente** del juego en el canal oficial.
   - La comunidad prueba el juego en abierto, reporta bugs y se distribuye el **"Meme Toolkit"** público (memes, gifs y stickers) para que cualquiera pueda compartirlo libremente.
@@ -87,10 +87,10 @@ Because the EUR/SOL spot price fluctuates in live markets, the execution strateg
 
 ### Phase 2: Community Bootstrapping & Public Hype Crescendo (T-24h to T-2h)
 - **T-18h: Public Telegram Opening & Bot Verification**:
-  - Open the public Telegram group (`t.me/JeetSlapperOfficial`).
+  - Open the public Telegram chat (`t.me/+aGQnR6gxz_oxNWY0`), linked to the channel `t.me/RealBertoBcn`.
   - Install anti-bot verification (`@RoseBot` or `@Shieldy_bot` captcha) to eliminate spam raid bots.
   - Pin the Master Announcement: Explaining the project lore, zero-tax structure, 1.742% dev holding commitment, 1.5% Graduation Jackpot with 3-tier milestone vesting (33% at migration, 33% at 24h, 34% at 48h conditioned on holding tier), and exact launch timestamp.
-- **T-12h: Twitter/X Narrative Thread & Raid 1**:
+- **T-12h: Twitter/X Narrative Thread**:
   - Publish an authoritative 8-tweet narrative thread on X:
     > *"Every pump.fun run dies because of one creature: The Jeet. We built an on-chain weapon to destroy them. Introducing JEET SLAPPER ($JSLAP): The first memecoin that slaps sellers in real time. Launching in 12 hours. 🧵👇"*
   - Community members who played the public beta are invited (never paid or coordinated in private) to share their own clips and scores. No paid shills, no undisclosed promotion, no scripted raids.
@@ -117,8 +117,8 @@ Because the EUR/SOL spot price fluctuates in live markets, the execution strateg
     *(Trade on: Pump.fun | BullX | Photon | DexScreener)*
 - **T+0:30 (Minute 0:30): Twitter/X Launch Broadcast**:
   - Post official launch tweet with CA and proof of dev buy transaction (Solscan link) to confirm 1.742% holding.
-- **T+1:00 (Minute 1:00): Synchronized Community Raid**:
-  - Community members execute pre-formatted copypastas and memes on high-traffic Solana X accounts to push `$JSLAP` into trending algorithms.
+- **T+1:00 (Minute 1:00): Official posts only**:
+  - Pin the CA in the channel and the chat and add it to the landing page. Share your own launch post from `@albertv_dev`. Community members may share if they want, but there are **no scripted copypastas, paid shills or coordinated raids** (see section 7.2).
 
 ---
 
@@ -182,9 +182,9 @@ MC: $4k - $16k        MC: $16k - $32k        MC: $32k - $52k        MC: $52k - $
 
 | Scenario / Risk | Impact | Automated / Tactical Mitigation Strategy |
 | :--- | :--- | :--- |
-| **Volume Dip / Bonding Curve Plateau** | Momentum slows between 20 and 40 SOL raised; sideways trading. | 1. Host flash "Slap Tournament": The highest slap score in the next 60 minutes wins a 0.05 SOL bounty from the treasury.<br>2. Highlight that the 1.5% Migration Jackpot unlocks ONLY if PumpSwap is reached, motivating holders to raid and recruit.<br>3. Deploy pre-rendered high-conviction video memes on X. |
+| **Volume Dip / Bonding Curve Plateau** | Momentum slows between 20 and 40 SOL raised; sideways trading. | 1. Host flash "Slap Tournament": The highest slap score in the next 60 minutes wins a 0.05 SOL bounty from the treasury.<br>2. Highlight that the 1.5% Migration Jackpot unlocks ONLY if PumpSwap is reached, motivating players to invite friends to the game.<br>3. Deploy pre-rendered high-conviction video memes on X. |
 | **Early Sniper Whale Dump** | An early buyer sells 1.0 SOL, causing a temporary 15% price drop. | 1. Sarcastic AI bot immediately roasts the seller in Telegram: *"🚨 JEET DETECTED: Sold for lunch money. Your multiplier is wiped!"*<br>2. Remind community that the dev has not sold a single token and that a lower entry price allows new diamond hands to acquire cheap bags. |
-| **Copycat / Vampire Token Launch** | A bad actor deploys a fake `$JSLAP` token on pump.fun attempting to hijack search traffic. | 1. The Telegram bot pins a bold security warning with the verified Mint Address and a direct 1-tap link.<br>2. Report the fake token on pump.fun.<br>3. Community executes a "Slap the Copycat" raid on the imposter's comment section. |
+| **Copycat / Vampire Token Launch** | A bad actor deploys a fake `$JSLAP` token on pump.fun attempting to hijack search traffic. | 1. The Telegram bot pins a bold security warning with the verified Mint Address and a direct 1-tap link.<br>2. Report the fake token on pump.fun.<br>3. Post a clear warning in the channel and on X with the only official CA. |
 | **FUD in Telegram Chat** | Trolls post "dev will dump" or "project is dead". | 1. Automate `@RoseBot` blacklisting of trigger phrases.<br>2. Trigger `/roast` command targeting the FUDder, letting the AI roast their low-effort trolling.<br>3. Pin the on-chain Solscan link displaying the developer wallet holding exactly 1.742%. |
 | **Post-Migration Dump Trap & Front-Running** | Whales dump at 80–84 SOL anticipating a sudden 15M jackpot dump upon PumpSwap graduation. | 1. Implement 3-tier milestone vesting (33% at migration, 33% at 24h, 34% at 48h conditioned on holding tier). Initial PumpSwap price impact is capped under 3.8%.<br>2. Enforce 30-minute holding maturation and final migration snapshot so snipers cannot Sybil-pass bags.<br>3. Any token sell during the 48h window forfeits unvested tranches to on-chain burn. |
 | **Solana Network Congestion** | Priority fees spike, causing transaction confirmation delays. | 1. The `ResilientSolanaConnection` automatically shifts RPC calls to backup endpoints.<br>2. In-game scores and balance verifications are buffered in client-side storage and retried via exponential backoff. |

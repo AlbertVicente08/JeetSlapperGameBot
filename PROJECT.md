@@ -1,5 +1,7 @@
 # Project: Solana Pump.fun Low-Cost Crypto Blueprint & MVP
 
+> **Documento histórico** (lo generó Antigravity el 2026-10-15). La arquitectura real es distinta: Vite + React en Cloudflare Pages + Supabase, sin Next.js ni Upstash. El estado actual y los pendientes están en [`ESTADO.md`](ESTADO.md).
+
 ## Architecture
 - **Ecosystem**: Solana Blockchain, Pump.fun deterministic bonding curve ($k = 3.219 \times 10^{25}$), PumpSwap DEX.
 - **Client & Interface**: Telegram Mini App (TMA) built with Next.js 14 / Vite + React, Tailwind CSS, Telegram WebApp SDK (`@twa-dev/sdk`), Solana Mobile Wallet Adapter.

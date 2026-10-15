@@ -4,9 +4,9 @@ export const LINKS = {
   chat: 'https://t.me/+aGQnR6gxz_oxNWY0',
   twitter: 'https://x.com/albertv_dev',
   twitterGame: 'https://x.com/JeetSlapperGame',
-  pumpFun: 'https://pump.fun/coin/2XH6ghptg4FeKCgyn7KqaiEcei5ivgniTqi9nfZApump',
-  dexscreener: 'https://dexscreener.com/solana/2XH6ghptg4FeKCgyn7KqaiEcei5ivgniTqi9nfZApump',
-  ca: '2XH6ghptg4FeKCgyn7KqaiEcei5ivgniTqi9nfZApump',
+  pumpFun: 'https://pump.fun/coin/AvBWjB7doWb1h7TmketWaFfZ4i2vcfCvRXstyBMGpump',
+  dexscreener: 'https://dexscreener.com/solana/AvBWjB7doWb1h7TmketWaFfZ4i2vcfCvRXstyBMGpump',
+  ca: 'AvBWjB7doWb1h7TmketWaFfZ4i2vcfCvRXstyBMGpump',
   rules: 'https://jeet-slapper.pages.dev/rules/',
   privacy: 'https://jeet-slapper.pages.dev/privacy/',
 }

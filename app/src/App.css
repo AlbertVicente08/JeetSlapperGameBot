@@ -29,7 +29,7 @@
   z-index: 2;
 }
 
-/* Menú y resultados */
+/* Menu and results */
 .panel {
   flex: 1;
   padding: 32px 0 24px;
@@ -187,10 +187,7 @@
   padding-left: 14px;
 }
 
-.info .btn {
-  min-width: 0;
-  width: 100%;
-  font-size: 8px;
+.info .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -223,6 +220,100 @@
   background: #1a1030;
   border: 1px solid var(--cyan);
   cursor: pointer;
+}
+
+/* Bonding curve */
+.curve {
+  width: 100%;
+  max-width: 340px;
+  font-size: 8px;
+}
+
+.curve-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: var(--cyan);
+}
+
+.curve-bar {
+  height: 10px;
+  background: #2a1d48;
+  border: 1px solid var(--line, #34245a);
+}
+
+.curve-bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--gold));
+}
+
+.curve.done {
+  color: var(--green);
+  margin: 0;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tabs button {
+  font-size: 9px;
+  padding: 10px 12px;
+  background: transparent;
+  border: 2px solid #34245a;
+  cursor: pointer;
+}
+
+.tabs button.on {
+  border-color: var(--pink);
+  background: #1a1030;
+  color: var(--pink);
+}
+
+/* Share */
+.share {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cardview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardview img {
+  width: min(300px, 80vw);
+  border: 2px solid var(--pink);
+}
+
+.plain {
+  list-style: none;
+  padding: 0 !important;
+}
+
+.footlinks {
+  margin-top: 10px !important;
+}
+
+.footlinks a {
+  color: var(--muted);
+}
+
+.btn.small {
+  min-width: 0;
+  width: 100%;
+  padding: 12px;
+  font-size: 9px;
+}
+
+.info a {
+  color: var(--cyan);
 }
 
 /* Ranking */

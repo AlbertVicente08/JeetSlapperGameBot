@@ -1,25 +1,25 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/slap.jpg" />
     <link rel="apple-touch-icon" href="/slap.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jeet Slapper ($JSLAP) · Abofetea a los jeets</title>
-    <meta name="description" content="Jeet Slapper: un juego arcade en Telegram con ranking global. Abofetea a los jeets, no toques a los diamond hands. Comunidad de BertoBCN." />
+    <title>Jeet Slapper ($JSLAP) · Slap the jeets</title>
+    <meta name="description" content="Jeet Slapper: an arcade game on Telegram with a global leaderboard, a weekly tournament and community boosts. Slap the jeets, never touch the diamond hands." />
     <meta property="og:title" content="Jeet Slapper ($JSLAP)" />
-    <meta property="og:description" content="Juego arcade en Telegram con ranking global y boosts para la comunidad." />
+    <meta property="og:description" content="Arcade game on Telegram with a global leaderboard, weekly tournament and community boosts." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://jeet-slapper.pages.dev/" />
     <meta property="og:image" content="https://jeet-slapper.pages.dev/slap.jpg" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:image" content="https://jeet-slapper.pages.dev/slap.jpg" />
     <meta name="twitter:site" content="@albertv_dev" />
+    <meta name="twitter:image" content="https://jeet-slapper.pages.dev/slap.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
     <script>
-      // Si se abre dentro de Telegram (Mini App), ir directamente al juego
+      // Opened inside Telegram (Mini App): go straight to the game
       if (/[#&]tgWebAppData=/.test(location.hash)) location.replace('/play/' + location.hash)
     </script>
     <link rel="stylesheet" href="/src/landing.css" />
@@ -28,26 +28,26 @@
     <header class="nav">
       <a class="logo" href="/">JEET<span>SLAPPER</span></a>
       <nav>
-        <a href="#juego">Juego</a>
-        <a href="#boosts">Boosts</a>
+        <a href="#game">Game</a>
+        <a href="#prizes">Prizes</a>
         <a href="#token">Token</a>
       </nav>
     </header>
 
     <main>
       <section class="hero">
-        <img class="hero-img" src="/slap.jpg" alt="Un guante dorado abofetea a un rollo de papel con la etiqueta SELL" width="512" height="512" />
-        <p class="kicker">Un juego arcade en Telegram</p>
-        <h1>Deja de mirar las velas rojas.<br /><em>Abofetea a los jeets.</em></h1>
+        <img class="hero-img" src="/slap.jpg" alt="A golden gauntlet slaps a toilet paper roll with a SELL tag" width="512" height="512" />
+        <p class="kicker">An arcade game on Telegram</p>
+        <h1>Stop staring at the red candles.<br /><em>Slap the jeets.</em></h1>
         <p class="lead">
-          Rondas de 30 segundos. Pega a los que venden, tumba a las ballenas y <b>no toques a los diamond hands</b>.
-          Ranking global con boosts para la comunidad.
+          30-second rounds. Slap the sellers, take down the whales, grab the power-ups and <b>never touch the diamond hands</b>.
+          Global leaderboard, weekly tournament and boosts for the community.
         </p>
         <div class="ctas">
-          <a class="btn primary" href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">🎮 Jugar en Telegram</a>
-          <a class="btn" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Unirme a la comunidad</a>
+          <a class="btn primary" href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">🎮 Play on Telegram</a>
+          <a class="btn" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Join the community</a>
         </div>
-        <p class="note">Gratis · sin descargar nada · funciona en el móvil</p>
+        <p class="note">Free · nothing to download · works on your phone</p>
         <div class="board" aria-hidden="true">
           <span>🧻</span><span class="empty"></span><span>💎</span>
           <span class="empty"></span><span>🐋</span><span>🚀</span>
@@ -55,85 +55,118 @@
         </div>
       </section>
 
-      <section id="juego">
-        <h2>Cómo se juega</h2>
+      <section id="game">
+        <h2>How to play</h2>
         <div class="cards">
           <article>
             <div class="big">👋</div>
-            <h3>Pega rápido</h3>
-            <p>🧻 Jeets +10 · 🪙 jeet dorado +50 · 🐋 ballenas en 3 golpes. Encadena aciertos para subir el combo hasta x3.</p>
+            <h3>Slap fast</h3>
+            <p>🧻 Jeets +10 · 🪙 golden jeet +50 · 🐋 whales in 3 hits. Chain hits to raise your combo up to x3.</p>
           </article>
           <article>
             <div class="big">⚠️</div>
-            <h3>Cuidado con lo que tocas</h3>
-            <p>💎 Diamond hand −25 · 💣 rug pull −50 y te limpia el tablero · cada jeet que se escapa −5.</p>
+            <h3>Watch what you touch</h3>
+            <p>💎 Diamond hand −25 · 💣 rug pull −50 and clears your board · every escaped jeet −5.</p>
           </article>
           <article>
             <div class="big">🚀</div>
             <h3>Power-ups</h3>
-            <p>🚀 PUMP: puntos x2 durante 5 s · ⏱️ +3 segundos · 🔥 los últimos 5 s son FINAL PUMP x2.</p>
+            <p>🚀 PUMP: x2 points for 5 s · ⏱️ +3 seconds · 🔥 the last 5 seconds are a FINAL PUMP x2.</p>
           </article>
         </div>
       </section>
 
-      <section id="boosts">
-        <h2>Boosts del ranking</h2>
-        <p class="sub">Tu mejor partida se multiplica según tus boosts. Se suman entre sí.</p>
+      <section id="prizes">
+        <h2>Prizes</h2>
         <div class="cards two">
           <article class="live">
-            <span class="pill">ACTIVO YA</span>
-            <h3>📣 Boost Comunidad · x1,5</h3>
-            <p>Únete al canal de BertoBCN y tu récord cuenta <b>x1,5</b>. Si te sales del canal, pierdes el boost.</p>
-            <a class="btn small" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">Unirme al canal</a>
+            <span class="pill">EVERY WEEK</span>
+            <h3>🏆 Weekly tournament</h3>
+            <p>Your best game of the week, <b>no boosts: pure skill</b>. Monday to Sunday (UTC).</p>
+            <ul>
+              <li>🥇 Telegram Gift + 👑 Hall of Fame + shout-out</li>
+              <li>🥈 👑 Hall of Fame + shout-out</li>
+              <li>🥉 👑 Hall of Fame + shout-out</li>
+            </ul>
+            <p class="small">Results are posted every Monday in the channel. Free to play: no purchase needed to win.</p>
           </article>
           <article>
-            <span class="pill soon">PRÓXIMAMENTE</span>
-            <h3>👛 Holder Boost · hasta x5</h3>
-            <p>Conecta tu wallet de Phantom cuando exista el token:</p>
+            <span class="pill soon">IF THE TOKEN GRADUATES</span>
+            <h3>💰 Graduation Jackpot</h3>
+            <p>If $JSLAP graduates on pump.fun, the <b>all-time top 20</b> share <b>1.5% of the supply</b>, paid in 3 parts over 48 h (33% / 33% / 34%) as long as they keep holding.</p>
             <ul>
-              <li>≥ 100.000 $JSLAP → <b>x2,5</b></li>
-              <li>≥ 500.000 $JSLAP → <b>x5</b></li>
-              <li>Hay que mantenerlos <b>30 minutos</b> para activarlo.</li>
-              <li>Si vendes, vuelve a x1 al momento.</li>
+              <li>1st 20% · 2nd 13.3% · 3rd 10%</li>
+              <li>4th–10th 5% each · 11th–20th 2.17% each</li>
+            </ul>
+          </article>
+        </div>
+        <p class="sub">Every top game is verified by replaying it on the server, and reviewed before any prize. <a href="/rules/">Full rules →</a></p>
+      </section>
+
+      <section id="boosts">
+        <h2>Leaderboard boosts</h2>
+        <p class="sub">They multiply your all-time score (not the weekly tournament) and stack.</p>
+        <div class="cards">
+          <article class="live">
+            <span class="pill">LIVE</span>
+            <h3>📣 Community · x1.5</h3>
+            <p>Join the BertoBCN channel and your record counts <b>x1.5</b>. Leave the channel and you lose it.</p>
+            <a class="btn small" href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">Join the channel</a>
+          </article>
+          <article class="live">
+            <span class="pill">LIVE</span>
+            <h3>🤝 Squad · up to +50%</h3>
+            <p>+10% for every friend who joins with your invite link and plays a game (max 5 friends). Get your link with <b>/invite</b> in the bot.</p>
+          </article>
+          <article>
+            <span class="pill soon">AT LAUNCH</span>
+            <h3>👛 Holder · up to x5</h3>
+            <ul>
+              <li>≥ 100,000 $JSLAP → <b>x2.5</b></li>
+              <li>≥ 500,000 $JSLAP → <b>x5</b></li>
+              <li>Hold for <b>30 minutes</b> to activate it.</li>
+              <li>Sell below your tier and it drops at once.</li>
             </ul>
           </article>
         </div>
       </section>
 
-      <section id="empezar">
-        <h2>Empieza en 3 pasos</h2>
+      <section id="start">
+        <h2>Start in 3 steps</h2>
         <ol class="steps">
-          <li><b>Abre el bot</b> <a href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">@JeetSlapperGameBot</a> y pulsa <b>Jugar</b>.</li>
-          <li><b>Únete al canal</b> <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> para activar el x1,5.</li>
-          <li><b>Sube en el ranking</b> y entra al <a href="https://t.me/+aGQnR6gxz_oxNWY0" target="_blank" rel="noopener">chat</a> a presumir de récord.</li>
+          <li><b>Open the bot</b> <a href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">@JeetSlapperGameBot</a> and tap <b>Play</b>.</li>
+          <li><b>Join the channel</b> <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> to activate x1.5.</li>
+          <li><b>Climb the ranking</b> and brag in the <a href="https://t.me/+aGQnR6gxz_oxNWY0" target="_blank" rel="noopener">chat</a>.</li>
         </ol>
       </section>
 
       <section id="token" class="token">
-        <h2>El token $JSLAP</h2>
+        <h2>The $JSLAP token</h2>
         <p>
-          $JSLAP se lanzará en <b>pump.fun</b> (Solana), sin impuestos y de forma abierta para todos. Servirá para activar el
-          Holder Boost del juego.
+          $JSLAP is planned to launch on <b>pump.fun</b> (Solana), with no taxes and open to everyone at the same time. It will
+          power the Holder Boost of the game.
         </p>
         <p class="alert">
-          🔒 La dirección del contrato (CA) <b>solo</b> se publicará en el canal oficial
-          <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> y en esta web. Cualquier otra
-          es falsa. Nadie del equipo te escribirá primero por privado.
+          🔒 The contract address (CA) will be published <b>only</b> in the official channel
+          <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">t.me/RealBertoBcn</a> and on this website. Any other
+          one is fake. Nobody from the team will ever DM you first.
         </p>
         <p class="risk">
-          ⚠️ Aviso de riesgo: las criptomonedas, y en especial las memecoins, son extremadamente volátiles. La mayoría pierden
-          todo su valor. Esto no es asesoramiento financiero. No compres lo que no puedas permitirte perder.
+          ⚠️ Risk warning: crypto-assets, and memecoins in particular, are extremely volatile. Most of them lose all their value.
+          This is not financial advice. Never buy what you cannot afford to lose.
         </p>
       </section>
     </main>
 
     <footer>
-      <p>Un proyecto de <b>BertoBCN</b>, construido en público.</p>
+      <p>A <b>BertoBCN</b> project, built in public.</p>
       <div class="links">
-        <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Canal</a>
+        <a href="https://t.me/RealBertoBcn" target="_blank" rel="noopener">📣 Channel</a>
         <a href="https://t.me/+aGQnR6gxz_oxNWY0" target="_blank" rel="noopener">💬 Chat</a>
         <a href="https://x.com/albertv_dev" target="_blank" rel="noopener">𝕏 @albertv_dev</a>
         <a href="https://t.me/JeetSlapperGameBot" target="_blank" rel="noopener">🎮 Bot</a>
+        <a href="/rules/">📜 Rules</a>
+        <a href="/privacy/">🔐 Privacy</a>
       </div>
     </footer>
   </body>

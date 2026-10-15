@@ -25,7 +25,7 @@ body,
   height: 100%;
   background: radial-gradient(circle at 50% 0%, var(--bg2), var(--bg) 70%);
   overscroll-behavior: none;
-  /* La sacudida al fallar desplaza la pantalla: sin esto aparece una barra de scroll horizontal */
+  /* The shake on a mistake moves the screen: without this a horizontal scrollbar appears */
   overflow-x: hidden;
   user-select: none;
   touch-action: manipulation;

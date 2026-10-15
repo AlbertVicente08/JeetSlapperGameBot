@@ -1,27 +1,48 @@
-// Cliente de la API del ranking (Cloudflare Pages Functions en /api).
+// Client of the game API (Cloudflare Pages Functions under /api).
 import type { Tap } from './game/engine'
 import { initData } from './telegram'
 
 export interface Ranked {
   name: string
-  score: number // puntuación del ranking (récord x boost)
-  community: boolean // tiene el Boost Comunidad
-  verified: boolean // récord verificado repitiendo la partida en el servidor
+  score: number // leaderboard score (record x boosts)
+  community: boolean // Community Boost
+  verified: boolean // record verified by replaying the game on the server
+  holder: number // Holder Boost multiplier (1 = none)
+  squad: number // active invited friends (max 5)
+  medal: number | null // 1-3 if top 3 of last week's tournament (Hall of Fame)
+}
+
+export interface Me {
+  best: number
+  ranked: number
+  rank: number
+  community: boolean
+  referrals: number
+  wallet: string | null
+  holderTier: number
+  holderMult: number
+  holderSince: string | null
 }
 
 export interface Leaderboard {
   top: Ranked[]
-  me: { best: number; ranked: number; rank: number; community: boolean } | null
+  me: Me | null
   players: number
+  weekly: {
+    week: string
+    top: { name: string; score: number }[]
+    me: { score: number; rank: number } | null
+    players: number
+  }
 }
 
 export interface SubmitResult {
-  counted: boolean // false si el detector de bots la ha descartado
+  counted: boolean // false if the bot detector discarded it
   status: 'ok' | 'suspicious' | 'rejected'
   reason?: string
-  replayed: boolean // el servidor la ha repetido (entraba en el top 3)
-  best?: number // récord sin boosts
-  ranked?: number // récord x boost
+  replayed: boolean // the server replayed it (it was entering a top 3)
+  best?: number
+  ranked?: number
   rank?: number
   improved?: boolean
   community?: boolean
@@ -31,6 +52,16 @@ export interface SubmitResult {
 export interface Session {
   sessionId: string
   seed: number
+}
+
+export interface Curve {
+  live: boolean
+  mint?: string
+  progress?: number
+  solRaised?: number
+  priceSol?: number
+  complete?: boolean
+  error?: string
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
@@ -49,3 +80,11 @@ export const submitScore = (sessionId: string, score: number, taps: Tap[]) =>
   post<SubmitResult>('/api/score', { initData: initData(), sessionId, score, taps })
 
 export const fetchLeaderboard = () => post<Leaderboard>('/api/leaderboard', { initData: initData() })
+
+export const startWalletLink = () => post<{ code: string; url: string; page: string }>('/api/wallet/start', { initData: initData() })
+
+export async function fetchCurve(): Promise<Curve> {
+  const res = await fetch('/api/curve')
+  if (!res.ok) throw new Error(`/api/curve: ${res.status}`)
+  return res.json() as Promise<Curve>
+}

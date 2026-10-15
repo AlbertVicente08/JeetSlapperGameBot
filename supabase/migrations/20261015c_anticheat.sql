@@ -1,5 +1,5 @@
--- Aplicada en el proyecto Supabase jeet-slapper (pascirdtgdemrnxjfcyw) el 2026-10-15.
--- Anti-trampas: sesiones de partida con semilla, registro de partidas y verificación del top 3.
+-- Applied to Supabase project jeet-slapper (pascirdtgdemrnxjfcyw) on 2026-10-15.
+-- Anti-cheat: seeded game sessions, game log and top-3 verification.
 create table public.game_sessions (
   id uuid primary key default gen_random_uuid(),
   telegram_id bigint not null,
@@ -10,7 +10,7 @@ create table public.game_sessions (
 create index game_sessions_user_idx on public.game_sessions (telegram_id, started_at desc);
 alter table public.game_sessions enable row level security;
 
--- Cada partida enviada, con el veredicto del detector (para poder revisar cómo juega la gente)
+-- Every submitted game with the detector's verdict (to review how people play)
 create table public.games (
   id bigint generated always as identity primary key,
   session_id uuid,
@@ -28,7 +28,7 @@ alter table public.games enable row level security;
 
 alter table public.players add column best_verified boolean not null default false;
 
--- Crea una sesión y devuelve su id
+-- Creates a session and returns its id
 create function public.create_session(p_telegram_id bigint, p_seed bigint)
 returns uuid
 language sql
@@ -37,7 +37,7 @@ as $$
   insert into public.game_sessions (telegram_id, seed) values (p_telegram_id, p_seed) returning id;
 $$;
 
--- Marca la sesión como usada (solo una vez y solo su dueño). Devuelve seed y ms transcurridos, o null.
+-- Marks the session as used (once, and only by its owner). Returns the seed and elapsed ms, or null.
 create function public.claim_session(p_id uuid, p_telegram_id bigint)
 returns json
 language sql
@@ -50,7 +50,7 @@ as $$
   returning json_build_object('seed', seed, 'elapsed_ms', round(extract(epoch from (now() - started_at)) * 1000));
 $$;
 
--- Puntuación de ranking del puesto N (0 si hay menos de N jugadores): para saber si alguien entra al top 3
+-- Ranking score at position N (0 if fewer than N players): to know if someone enters the top 3
 create function public.ranked_at(p_rank integer)
 returns integer
 language sql
@@ -73,7 +73,7 @@ as $$
   values (p_session, p_telegram_id, p_score, p_status, p_reason, p_replayed, p_stats);
 $$;
 
--- submit_score ahora recibe si la partida fue verificada repitiéndola
+-- submit_score now receives whether the game was verified by replaying it
 drop function if exists public.submit_score(bigint, text, text, integer, boolean);
 create function public.submit_score(
   p_telegram_id bigint, p_username text, p_first_name text, p_score integer, p_member boolean, p_verified boolean
@@ -107,7 +107,7 @@ begin
 end;
 $$;
 
--- El ranking incluye si el récord está verificado
+-- The leaderboard includes whether the record is verified
 create or replace function public.leaderboard(p_telegram_id bigint default null, p_limit integer default 10)
 returns json
 language sql

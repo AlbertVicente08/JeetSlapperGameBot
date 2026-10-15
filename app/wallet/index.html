@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link your wallet · Jeet Slapper</title>
+    <link rel="icon" type="image/jpeg" href="/slap.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/landing.css" />
+  </head>
+  <body>
+    <main class="narrow">
+      <section class="hero">
+        <img class="hero-img small" src="/slap.jpg" alt="" width="160" height="160" />
+        <h1>Link your Phantom wallet</h1>
+        <p class="lead">
+          Sign a message to prove the wallet is yours. It's free, it is <b>not</b> a transaction and it never gives access to
+          your funds.
+        </p>
+        <div id="box" class="card-box">
+          <p id="status">Checking Phantom…</p>
+          <button id="connect" class="btn primary" hidden>👛 Connect &amp; sign</button>
+          <a id="openPhantom" class="btn" hidden>Open in Phantom</a>
+          <a id="back" class="btn" href="https://t.me/JeetSlapperGameBot" hidden>⬅️ Back to Telegram</a>
+        </div>
+        <p class="note">One wallet per Telegram account. You can change it later from the game.</p>
+      </section>
+    </main>
+    <script type="module" src="/src/wallet.ts"></script>
+  </body>
+</html>

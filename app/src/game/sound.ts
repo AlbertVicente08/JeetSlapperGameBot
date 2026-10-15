@@ -1,4 +1,4 @@
-// Sonidos retro generados con WebAudio: sin ficheros de audio.
+// Retro sounds generated with WebAudio: no audio files.
 
 let ctx: AudioContext | null = null
 let muted = false

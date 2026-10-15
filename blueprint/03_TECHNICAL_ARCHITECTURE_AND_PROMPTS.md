@@ -1,14 +1,14 @@
 # Technical Architecture & Executable AI Prompt Suite
 
 **Document Reference**: `c:\Users\alber\..Proyectos\crypto\blueprint\03_TECHNICAL_ARCHITECTURE_AND_PROMPTS.md`  
-**Requirement Mapping**: R3 (Arquitectura técnica y prompts de construcción con IA)  
-**Acceptance Criteria Mapping**: C3 (Arquitectura Técnica y Prompts de Construcción)  
+**Requirement Mapping**: R3 (Technical architecture and AI build prompts)  
+**Acceptance Criteria Mapping**: C3 (Technical Architecture and Build Prompts)  
 **Target Platform**: Next.js 14 (App Router) / Edge Runtime, Cloudflare Pages / Workers  
 **Blockchain Runtime**: Solana Web3.js, Pump.fun Bonding Curve Program (`6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`)  
 **Operating Cost Benchmark**: Verified **0.00€ / Month** Recurring Expenditure  
 **Author / Worker**: Worker 1 (`teamwork_preview_worker`)  
 
-> **Nota de implementación (2026-10-15)**: El MVP real se construye en `app/` con **Vite + React + TypeScript** (frontend estático en Cloudflare Pages) en lugar de Next.js 14. Las funciones de servidor (webhook del bot, leaderboard, IA) irán como Cloudflare Pages Functions / Workers. Los prompts de la sección 4 se mantienen como referencia de diseño; antes de usarlos, revisa los nombres de modelo vigentes en Groq/Gemini (los modelos cambian con frecuencia).
+> **Implementation note (2026-10-16)**: the real product lives in `app/` and uses **Vite + React + TypeScript** on Cloudflare Pages (not Next.js 14), with Cloudflare Pages Functions for the bot webhook, leaderboard, anti-cheat and AI, and Supabase as the database. The prompts in section 4 are kept as a design reference only; check current model names before using them (the bot uses Groq `openai/gpt-oss-20b`). See `app/README.md` and `STATUS.md`.
 
 ---
 
@@ -75,7 +75,7 @@ This document defines the complete zero-cost software architecture and executabl
 ### 1.2 Component Inventory & Free-Tier Operational Guarantees
 
 | Architecture Layer | Component / Provider | Free Tier Allocation | Burst / Rate Limits | Zero-Cost Protection Guarantee |
-| **Edge Compute & Hosting** | **Cloudflare Pages (Recomendado)** / Vercel | • Cloudflare: Ancho de banda ILIMITADO, sin restricciones contra apps cripto/comerciales en su nivel gratuito.<br>• Despliegues estáticos y Functions sin coste.<br>• *Nota de cumplimiento*: Vercel Hobby prohíbe uso comercial; Cloudflare Pages es la opción segura para producción sin coste. | • Cloudflare: 100k req/día en workers, tiempo de ejecución edge óptimo. | Auto-scaling spend limits disabled. Zero credit card needed on Cloudflare Pages. Sin sorpresas de facturación. |
+| **Edge Compute & Hosting** | **Cloudflare Pages (Recommended)** / Vercel | • Cloudflare: UNLIMITED bandwidth, no restrictions against crypto/commercial apps on the free tier.<br>• Static deployments and Functions at no cost.<br>• *Compliance note*: Vercel Hobby forbids commercial use; Cloudflare Pages is the safe zero-cost option for production. | • Cloudflare: 100k requests/day on Workers, fast edge runtime. | Auto-scaling spend limits disabled. Zero credit card needed on Cloudflare Pages. No billing surprises. |
 | **Solana RPC Engine** | **Helius Free** + **QuickNode Discover** + Public | • Helius: 1,000,000 credits/mo<br>• QuickNode: 10,000,000 credits/mo<br>• Public: Unlimited failover | • Helius: 10 RPS<br>• QuickNode: 15 RPS<br>• Public: 40 req/10s | Client-side 60s cache and edge 10s `stale-while-revalidate` ensure monthly RPC consumption stays under 15,000 calls. Hard stop on quotas. |
 | **AI LLM Inference** | **Groq Cloud Free** + **Google Gemini Free** | • Groq: 14,400 RPD (8B)<br>• Groq: 1,000 RPD (70B)<br>• Gemini: 1,500 RPD (Flash) | • Groq: 30 RPM<br>• Gemini: 15 RPM | No billing details attached to developer accounts. Automated fallback cascade handles HTTP 429 by switching to next free model. |
 | **Database & Cache** | **Supabase Free** (Primary Store)<br>+ **Upstash Redis Free** (Leaderboard Cache) | • Supabase: 500 MB PostgreSQL, 50k MAU, unlimited API requests<br>• Upstash: 10,000 commands/day, 256MB memory | • Upstash: 100 req/sec burst<br>• Supabase: Direct PostgREST / REST API | **Architecture Boundary**: Supabase PostgreSQL is the primary persistent store for player profiles, SIWS wallet linkages, and high scores. Upstash Redis is reserved strictly as a short-TTL (60s) read cache for Top-100 leaderboards (`ZREVRANGE`). Game score submissions are debounced and batched to 1 sync request per energy session (5–10 mins), consuming only 1–2 Redis commands per session. This easily supports 3,000+ daily sessions (<4,000 cmds/day) within the 10,000 cmd/day free tier without billing overages. |

@@ -1,10 +1,10 @@
--- Aplicada en el proyecto Supabase jeet-slapper (pascirdtgdemrnxjfcyw) el 2026-10-15.
--- Boost Comunidad: x1.5 en el ranking si el jugador está en el canal de Telegram.
+-- Applied to Supabase project jeet-slapper (pascirdtgdemrnxjfcyw) on 2026-10-15.
+-- Community Boost: x1.5 on the leaderboard if the player is in the Telegram channel.
 alter table public.players
   add column community_member boolean not null default false,
   add column member_checked_at timestamptz;
 
--- Puntuación de ranking = récord x boost (redondeado)
+-- Ranking score = record x boost (rounded)
 alter table public.players
   add column ranked_score integer generated always as
     (round(best_score * case when community_member then 1.5 else 1 end)::integer) stored;
@@ -32,7 +32,7 @@ begin
     games = p.games + 1,
     best_score = greatest(p.best_score, excluded.best_score),
     updated_at = case when excluded.best_score > p.best_score then now() else p.updated_at end,
-    -- Si la comprobación con Telegram falló (null), se mantiene el estado anterior
+    -- If the Telegram check failed (null), keep the previous state
     community_member = coalesce(p_member, p.community_member),
     member_checked_at = case when p_member is null then p.member_checked_at else now() end
   returning * into v;
@@ -45,7 +45,7 @@ begin
 end;
 $$;
 
--- Actualiza la pertenencia al canal de varios jugadores (comprobada por el servidor con la API de Telegram)
+-- Updates the channel membership of several players (checked by the server with the Telegram API)
 create function public.set_membership(p_ids bigint[], p_members boolean[])
 returns void
 language sql
@@ -59,7 +59,7 @@ $$;
 
 drop function if exists public.leaderboard(bigint, integer);
 
--- Top N (con id y fecha de comprobación para que el servidor revise la pertenencia) y la posición del jugador.
+-- Top N (with id and check date so the server can re-check membership) and the player's position.
 create function public.leaderboard(p_telegram_id bigint default null, p_limit integer default 10)
 returns json
 language sql

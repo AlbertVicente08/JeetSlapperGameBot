@@ -1,8 +1,8 @@
 # Comparative Analysis of Low-Cost Solana Crypto Concepts
 
 **Document Reference**: `c:\Users\alber\..Proyectos\crypto\blueprint\01_COMPARATIVE_ANALYSIS.md`  
-**Requirement Mapping**: R1 (Análisis comparativo de narrativas y modelos)  
-**Acceptance Criteria Mapping**: C1 (Análisis y Comparativa)  
+**Requirement Mapping**: R1 (Comparative analysis of narratives and models)  
+**Acceptance Criteria Mapping**: C1 (Analysis and Comparison)  
 **Target Platform**: Solana Blockchain, Pump.fun Bonding Curve  
 **Capital Constraint**: ~100€ Initial Deployment Budget (0.65–0.75 SOL)  
 **Operating Expenditure Constraint**: $\le 10€/\text{month}$ (Target: 0.00€/month permanently)  

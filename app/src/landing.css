@@ -35,7 +35,7 @@ a {
   color: var(--cyan);
 }
 
-/* Navegación */
+/* Navigation */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -344,7 +344,74 @@ footer a {
   text-decoration: none;
 }
 
-/* Móvil */
+/* Small text */
+.small {
+  font-size: 13px !important;
+  color: var(--muted) !important;
+}
+
+/* Wallet page */
+.narrow {
+  max-width: 560px;
+}
+
+.hero-img.small {
+  width: 160px;
+}
+
+.card-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  background: var(--card);
+  border: 2px solid var(--line);
+  padding: 22px;
+}
+
+.card-box p {
+  margin: 0;
+}
+
+.card-box .ok {
+  color: var(--green);
+}
+
+.card-box [hidden] {
+  display: none;
+}
+
+/* Rules / privacy */
+.prose {
+  max-width: 760px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.prose h1 {
+  font-family: var(--pixel);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--pink);
+  margin-bottom: 8px;
+}
+
+.prose h2 {
+  font-size: 13px;
+  margin: 32px 0 12px;
+}
+
+.prose p,
+.prose li {
+  font-size: 15px;
+  color: #d9d3f0;
+}
+
+.prose li {
+  margin-bottom: 6px;
+}
+
+/* Mobile */
 @media (max-width: 760px) {
   section {
     padding: 40px 0;

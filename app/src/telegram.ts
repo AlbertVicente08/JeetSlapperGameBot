@@ -1,5 +1,5 @@
-// Envoltorio mínimo del SDK de Telegram Mini Apps (cargado en index.html).
-// Fuera de Telegram todo es no-op, así el juego funciona en un navegador normal.
+// Minimal wrapper of the Telegram Mini Apps SDK (loaded in play/index.html).
+// Outside Telegram everything is a no-op, so the game also works in a normal browser.
 
 interface TgWebApp {
   initData: string
@@ -23,14 +23,24 @@ declare global {
 
 const wa = (): TgWebApp | undefined => {
   const app = window.Telegram?.WebApp
-  // El script define WebApp aunque no estemos dentro de Telegram; initData vacío = navegador normal
+  // The script defines WebApp even outside Telegram; empty initData = normal browser
   return app && app.initData ? app : undefined
 }
 
+export const BOT = 'JeetSlapperGameBot'
+
 export const inTelegram = () => !!wa()
 
-/** initData firmado por Telegram; el servidor lo valida para saber quién juega. */
+/** initData signed by Telegram; the server validates it to know who is playing. */
 export const initData = () => wa()?.initData ?? ''
+
+export const userId = () => wa()?.initDataUnsafe?.user?.id ?? null
+
+/** Personal invite link (the bot records the referral on /start). */
+export const inviteLink = () => {
+  const id = userId()
+  return id ? `https://t.me/${BOT}?start=ref_${id}` : `https://t.me/${BOT}`
+}
 
 export function initTelegram() {
   const app = wa()
@@ -39,7 +49,7 @@ export function initTelegram() {
   app.expand()
 }
 
-/** Abre un enlace: los t.me dentro de Telegram, el resto en el navegador. */
+/** Opens a link: t.me links inside Telegram, the rest in the browser. */
 export function openLink(url: string) {
   const app = wa()
   if (app?.openTelegramLink && url.startsWith('https://t.me/')) return app.openTelegramLink(url)
@@ -49,7 +59,7 @@ export function openLink(url: string) {
 
 export function playerName(): string {
   const u = wa()?.initDataUnsafe?.user
-  return u?.username ? `@${u.username}` : u?.first_name ?? 'Anon Degen'
+  return u?.username ? `@${u.username}` : (u?.first_name ?? 'Anon Degen')
 }
 
 export const haptic = {

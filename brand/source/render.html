@@ -1,0 +1,100 @@
+<!doctype html>
+<!-- Brand asset renderer. Rendered with headless Chrome by brand/source/render.ps1:
+     render.html#sticker-0, #meme-2, #banner ... -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --pink: #ff2e88;
+        --cyan: #22e6ff;
+        --gold: #ffd23f;
+        --green: #39ff88;
+        --red: #ff4545;
+        --bg: #0b0716;
+        --px: 'Press Start 2P', monospace;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      html, body { background: transparent; overflow: hidden; }
+      .stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .pix { font-family: var(--px); line-height: 1.25; }
+      .outline { -webkit-text-stroke: 10px #000; paint-order: stroke fill; }
+      .emoji { font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif; line-height: 1; }
+      .dark { background: radial-gradient(circle at 50% 0%, #1a1030, var(--bg) 70%); }
+      .art { border-radius: 50%; box-shadow: 0 0 0 10px var(--pink), 0 0 60px rgba(255, 46, 136, .6); }
+      .handle { font-family: var(--px); color: var(--cyan); }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const ART = '../slap-original-2000.jpg'
+      // Stickers: 512x512, transparent background
+      const STICKERS = [
+        { art: true },
+        { emoji: '🚨🧻', text: 'JEET\nDETECTED', color: 'var(--red)' },
+        { emoji: '💎🙌', text: 'HODL', color: 'var(--cyan)' },
+        { emoji: '👋💥', text: 'GET\nSLAPPED', color: 'var(--pink)' },
+        { emoji: '📉', text: 'NGMI', color: 'var(--red)' },
+        { emoji: '🚀', text: 'WAGMI', color: 'var(--green)' },
+        { emoji: '💣', text: 'RUG\nALERT', color: 'var(--gold)' },
+        { emoji: '🐋', text: 'WHALE\nDOWN', color: 'var(--cyan)' },
+      ]
+      // Memes for X: 1200x675
+      const MEMES = [
+        { top: 'POV: YOU SOLD AT -2%', bottom: 'AND THEN IT DID A 10X', art: true },
+        { split: true },
+        { top: 'EVERY PUMP.FUN CHART', mid: '📉 JEETS\n👋💥 SLAPPERS', bottom: 'BE THE SLAPPER' },
+        { top: 'NEW WEEK, NEW TOURNAMENT', mid: '🏆', bottom: 'PLAY FREE ON TELEGRAM\n@JeetSlapperGameBot', art: false, promo: true },
+        { top: 'ME AFTER SLAPPING 50 JEETS', mid: '😌☕', bottom: 'BEFORE BREAKFAST' },
+      ]
+
+      const root = document.getElementById('root')
+      const [kind, idx] = location.hash.slice(1).split('-')
+      const i = Number(idx || 0)
+      const h = (html) => (root.innerHTML = html)
+      const lines = (s) => s.replace(/\n/g, '<br>')
+
+      if (kind === 'sticker') {
+        const s = STICKERS[i]
+        document.body.style.width = '512px'
+        if (s.art) {
+          h(`<div class="stage" style="width:512px;height:512px"><img class="art" src="${ART}" style="width:440px;height:440px"></div>`)
+        } else {
+          h(`<div class="stage" style="width:512px;height:512px;gap:18px">
+              <div class="emoji" style="font-size:150px">${s.emoji}</div>
+              <div class="pix outline" style="font-size:${s.text.length > 6 ? 54 : 72}px;color:${s.color}">${lines(s.text)}</div>
+            </div>`)
+        }
+      } else if (kind === 'meme') {
+        const m = MEMES[i]
+        const frame = (inner) => `<div class="stage dark" style="width:1200px;height:675px;gap:24px;padding:40px">${inner}
+            <div class="handle" style="position:absolute;bottom:22px;right:30px;font-size:16px">t.me/JeetSlapperGameBot</div></div>`
+        if (m.split) {
+          h(frame(`<div class="pix outline" style="font-size:40px;color:#fff">YOUR HANDS</div>
+            <div style="display:flex;gap:60px;align-items:center">
+              <div class="stage" style="gap:12px"><div class="emoji" style="font-size:160px">🧻</div><div class="pix outline" style="font-size:34px;color:var(--red)">PAPER<br>SELL @ -2%</div></div>
+              <div class="pix" style="font-size:40px;color:var(--gold)">VS</div>
+              <div class="stage" style="gap:12px"><div class="emoji" style="font-size:160px">💎</div><div class="pix outline" style="font-size:34px;color:var(--cyan)">DIAMOND<br>HODL</div></div>
+            </div>`))
+        } else {
+          h(frame(`<div class="pix outline" style="font-size:44px;color:#fff">${lines(m.top)}</div>
+            ${m.art ? `<img class="art" src="${ART}" style="width:330px;height:330px">` : `<div class="emoji pix" style="font-size:150px">${lines(m.mid ?? '')}</div>`}
+            <div class="pix outline" style="font-size:${m.promo ? 30 : 44}px;color:${m.promo ? 'var(--cyan)' : 'var(--gold)'}">${lines(m.bottom)}</div>`))
+        }
+      } else if (kind === 'banner') {
+        // X header / DexScreener header: 1500x500
+        h(`<div class="stage dark" style="width:1500px;height:500px;flex-direction:row;gap:60px;justify-content:center">
+            <img class="art" src="${ART}" style="width:380px;height:380px">
+            <div class="stage" style="align-items:flex-start;text-align:left;gap:26px">
+              <div class="pix outline" style="font-size:78px;color:var(--pink)">JEET<br>SLAPPER</div>
+              <div class="pix" style="font-size:22px;color:var(--cyan)">STOP STARING AT THE RED CANDLES.<br>SLAP THE JEETS.</div>
+              <div class="pix" style="font-size:18px;color:var(--gold)">🏆 WEEKLY TOURNAMENT · PLAY FREE ON TELEGRAM</div>
+              <div class="pix" style="font-size:16px;color:#fff">jeet-slapper.pages.dev · @JeetSlapperGameBot</div>
+            </div>
+          </div>`)
+      }
+    </script>
+  </body>
+</html>

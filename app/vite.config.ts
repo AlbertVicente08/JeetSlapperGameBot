@@ -3,14 +3,19 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
-// Dos páginas: la landing en / y el juego (Telegram Mini App) en /play/
+// Pages: landing (/), game = Telegram Mini App (/play/), wallet linking (/wallet/), rules and privacy
+const page = (p: string) => resolve(import.meta.dirname, p)
+
 export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
       input: {
-        landing: resolve(import.meta.dirname, 'index.html'),
-        play: resolve(import.meta.dirname, 'play/index.html'),
+        landing: page('index.html'),
+        play: page('play/index.html'),
+        wallet: page('wallet/index.html'),
+        rules: page('rules/index.html'),
+        privacy: page('privacy/index.html'),
       },
     },
   },

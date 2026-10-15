@@ -1,5 +1,5 @@
--- Aplicada en el proyecto Supabase jeet-slapper (pascirdtgdemrnxjfcyw) el 2026-10-15.
--- Ranking de Jeet Slapper. Solo el servidor (service_role) lee y escribe.
+-- Applied to Supabase project jeet-slapper (pascirdtgdemrnxjfcyw) on 2026-10-15.
+-- Jeet Slapper leaderboard. Only the server (service_role) reads and writes.
 create table public.players (
   telegram_id bigint primary key,
   username text,
@@ -13,9 +13,9 @@ create table public.players (
 create index players_best_score_idx on public.players (best_score desc, updated_at asc);
 
 alter table public.players enable row level security;
--- Sin políticas: anon/authenticated no pueden acceder. service_role ignora RLS.
+-- No policies: anon/authenticated cannot access. service_role bypasses RLS.
 
--- Guarda una partida y devuelve el récord del jugador y su posición.
+-- Saves a game and returns the player's record and position.
 create or replace function public.submit_score(
   p_telegram_id bigint, p_username text, p_first_name text, p_score integer
 ) returns json
@@ -42,7 +42,7 @@ begin
 end;
 $$;
 
--- Top N y la posición de un jugador.
+-- Top N and a player's position.
 create or replace function public.leaderboard(p_telegram_id bigint default null, p_limit integer default 10)
 returns json
 language sql

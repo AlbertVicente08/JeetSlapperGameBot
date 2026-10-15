@@ -1,35 +1,35 @@
-// Lógica pura del juego (sin React ni DOM). Es determinista: con la misma semilla y los mismos
-// toques sale exactamente la misma partida, así el servidor puede repetirla para verificarla.
+// Pure game logic (no React, no DOM). It is deterministic: the same seed and the same taps
+// always produce the same game, so the server can replay it to verify it.
 
 export type Kind =
-  | 'jeet' // +10, abofetéalo
-  | 'holder' // diamond hand: −25 si le pegas
-  | 'whale' // 3 golpes
-  | 'golden' // jeet dorado: rápido y raro, +50
-  | 'rug' // bomba: −50, rompe la racha y vacía el tablero
-  | 'pump' // power-up: puntos x2 durante 5 s
-  | 'clock' // power-up: +3 s de partida
+  | 'jeet' // +10, slap it
+  | 'holder' // diamond hand: −25 if you hit it
+  | 'whale' // 3 hits
+  | 'golden' // golden jeet: fast and rare, +50
+  | 'rug' // bomb: −50, breaks the streak and clears the board
+  | 'pump' // power-up: x2 points for 5 s
+  | 'clock' // power-up: +3 s of game time
 
 export interface Mole {
   id: number
   kind: Kind
-  hp: number // golpes que faltan (la ballena necesita 3)
-  born: number // ms (tiempo de juego) en que apareció
-  until: number // ms (tiempo de juego) en que se escapa
+  hp: number // hits left (the whale needs 3)
+  born: number // game ms when it appeared
+  until: number // game ms when it escapes
 }
 
 export interface GameState {
-  elapsed: number // ms desde el inicio de la ronda
-  duration: number // duración total (30 s + bonus de relojes)
+  elapsed: number // ms since the round started
+  duration: number // total duration (30 s + clock bonuses)
   holes: (Mole | null)[]
   score: number
-  streak: number // aciertos seguidos
+  streak: number // consecutive hits
   slaps: number
   escaped: number
   nextSpawn: number
   nextId: number
-  pumpUntil: number // hasta cuándo dura el power-up PUMP
-  rng: number // estado del generador aleatorio (sale de la semilla)
+  pumpUntil: number // until when the PUMP power-up lasts
+  rng: number // random generator state (comes from the seed)
   over: boolean
 }
 
@@ -40,16 +40,16 @@ export type Event =
 
 export const ROUND_MS = 30_000
 export const HOLES = 12
-export const ESCAPE_PENALTY = 5 // jeet o ballena que se escapa
+export const ESCAPE_PENALTY = 5 // jeet or whale that escapes
 export const HOLDER_PENALTY = 25
 export const RUG_PENALTY = 50
 export const PUMP_MS = 5_000
 export const CLOCK_MS = 3_000
-export const MAX_BONUS_MS = 9_000 // como mucho +9 s por relojes
-export const FINAL_MS = 5_000 // últimos 5 s: FINAL PUMP, puntos x2
-export const STEP_MS = 20 // el juego avanza siempre en pasos fijos de 20 ms
+export const MAX_BONUS_MS = 9_000 // at most +9 s from clocks
+export const FINAL_MS = 5_000 // last 5 s: FINAL PUMP, x2 points
+export const STEP_MS = 20 // the game always advances in fixed 20 ms steps
 
-/** Generador pseudoaleatorio mulberry32: devuelve [número 0..1, nuevo estado]. */
+/** mulberry32 pseudo-random generator: returns [number 0..1, new state]. */
 function nextRand(state: number): [number, number] {
   const a = (state + 0x6d2b79f5) | 0
   let t = Math.imul(a ^ (a >>> 15), 1 | a)
@@ -76,7 +76,7 @@ export function newGame(seed: number = randomSeed()): GameState {
   }
 }
 
-/** 1x, 1.5x, 2x... hasta 3x cada 5 aciertos seguidos. */
+/** 1x, 1.5x, 2x... up to 3x, every 5 consecutive hits. */
 export function comboMultiplier(streak: number): number {
   return Math.min(3, 1 + Math.floor(streak / 5) * 0.5)
 }
@@ -84,12 +84,12 @@ export function comboMultiplier(streak: number): number {
 export const pumpActive = (s: GameState) => s.elapsed < s.pumpUntil
 export const finalPump = (s: GameState) => s.duration - s.elapsed <= FINAL_MS && !s.over
 
-/** Multiplicador total que se aplica a los puntos positivos. */
+/** Total multiplier applied to positive points. */
 export function pointsMultiplier(s: GameState, streak = s.streak): number {
   return comboMultiplier(streak) * (pumpActive(s) ? 2 : 1) * (finalPump(s) ? 2 : 1)
 }
 
-/** Nivel según el tiempo: 0 Baby Jeets, 1 Sniper Bots, 2 Whale Season. */
+/** Level by time: 0 Baby Jeets, 1 Sniper Bots, 2 Whale Season. */
 export function tier(elapsed: number): 0 | 1 | 2 {
   if (elapsed < 10_000) return 0
   if (elapsed < 20_000) return 1
@@ -107,7 +107,7 @@ function difficulty(elapsed: number) {
   }
 }
 
-// Probabilidades (pesos) de cada tipo por nivel: cada nivel trae más bombas y más premios
+// Weights of each kind per level: every level brings more bombs and more rewards
 const WEIGHTS: Record<0 | 1 | 2, [Kind, number][]> = {
   0: [['jeet', 55], ['holder', 30], ['golden', 4], ['pump', 4], ['clock', 4], ['rug', 3]],
   1: [['jeet', 42], ['holder', 30], ['whale', 10], ['golden', 5], ['pump', 4], ['clock', 3], ['rug', 6]],
@@ -134,7 +134,7 @@ function pickKind(elapsed: number, rand: () => number): Kind {
   return 'jeet'
 }
 
-/** Avanza el juego un paso fijo (STEP_MS). Devuelve el nuevo estado y los eventos ocurridos. */
+/** Advances the game one fixed step (STEP_MS). Returns the new state and the events that happened. */
 export function tick(s: GameState, dt: number = STEP_MS): [GameState, Event[]] {
   if (s.over) return [s, []]
   const events: Event[] = []
@@ -148,11 +148,11 @@ export function tick(s: GameState, dt: number = STEP_MS): [GameState, Event[]] {
   let { score, streak, escaped, nextSpawn, nextId } = s
   const holes = s.holes.slice()
 
-  // Los que se escapan
+  // The ones that escape
   holes.forEach((m, i) => {
     if (m && m.until <= elapsed) {
       holes[i] = null
-      // Dejar escapar a un jeet o una ballena rompe la racha y resta
+      // Letting a jeet or a whale escape breaks the streak and costs points
       if (m.kind === 'jeet' || m.kind === 'whale') {
         streak = 0
         escaped++
@@ -162,7 +162,7 @@ export function tick(s: GameState, dt: number = STEP_MS): [GameState, Event[]] {
     }
   })
 
-  // Aparecen nuevos
+  // New ones appear
   if (elapsed >= nextSpawn) {
     const d = difficulty(elapsed)
     const count = rand() < d.doubleChance ? 2 : 1
@@ -188,19 +188,19 @@ export function tick(s: GameState, dt: number = STEP_MS): [GameState, Event[]] {
   ]
 }
 
-/** Toque registrado: [ms de juego, casilla, 1 si lo hizo un dedo real (isTrusted) / 0 si fue código]. */
+/** Recorded tap: [game ms, square, 1 if made by a real finger (isTrusted) / 0 if made by code]. */
 export type Tap = [t: number, hole: number, trusted: 0 | 1]
 
 export interface ReplayResult {
   state: GameState
-  /** Por cada toque sobre algo: qué era y cuánto tardó el jugador en reaccionar (ms). */
+  /** For every tap on something: what it was and how long the player took to react (ms). */
   hits: { kind: Kind; reaction: number }[]
-  misses: number // toques en casillas vacías
+  misses: number // taps on empty squares
 }
 
 /**
- * Repite una partida completa a partir de la semilla y los toques.
- * Los toques se aplican antes del paso cuyo tiempo coincide, igual que en el cliente.
+ * Replays a full game from the seed and the taps.
+ * Taps are applied before the step whose time matches, exactly like in the client.
  */
 export function replay(seed: number, taps: Tap[]): ReplayResult {
   let s = newGame(seed)
@@ -221,7 +221,7 @@ export function replay(seed: number, taps: Tap[]): ReplayResult {
   return { state: s, hits, misses }
 }
 
-/** El jugador toca un agujero. */
+/** The player taps a square. */
 export function slap(s: GameState, hole: number): [GameState, Event[]] {
   if (s.over) return [s, []]
   const m = s.holes[hole]
@@ -232,12 +232,12 @@ export function slap(s: GameState, hole: number): [GameState, Event[]] {
 
   switch (m.kind) {
     case 'holder': {
-      // Abofetear a un diamond hand: penalización y se acaba la racha
+      // Slapping a diamond hand: penalty and the streak ends
       holes[hole] = null
       return [{ ...s, holes, score: Math.max(0, s.score - HOLDER_PENALTY), streak: 0 }, [hit(-HOLDER_PENALTY)]]
     }
     case 'rug': {
-      // Rug pull: resta, rompe la racha y se lleva todo el tablero
+      // Rug pull: costs points, breaks the streak and wipes the whole board
       return [
         { ...s, holes: Array(HOLES).fill(null), score: Math.max(0, s.score - RUG_PENALTY), streak: 0 },
         [hit(-RUG_PENALTY)],
@@ -253,7 +253,7 @@ export function slap(s: GameState, hole: number): [GameState, Event[]] {
       return [{ ...s, holes, duration, slaps: s.slaps + 1 }, [hit(0)]]
     }
     default: {
-      // jeet, golden y ballena suman puntos con el multiplicador
+      // jeet, golden and whale add points with the multiplier
       const hp = m.hp - 1
       const killed = hp <= 0
       const streak = s.streak + 1

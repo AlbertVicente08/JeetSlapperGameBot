@@ -1,7 +1,7 @@
 # Tactical Launch Plan & Operational Playbook
 
 **Document Reference**: `c:\Users\alber\..Proyectos\crypto\blueprint\04_TACTICAL_LAUNCH_PLAN.md`  
-**Requirement Mapping**: R4 (Plan táctico de lanzamiento en pump.fun con ~100€)  
+**Requirement Mapping**: R4 (Tactical pump.fun launch plan with ~€100)  
 **Acceptance Criteria Mapping**: C4 (Estrategia y Plan de Lanzamiento en pump.fun)  
 **Target Token**: JEET SLAPPER ($JSLAP)  
 **Initial Capital Budget**: Exactly **100.00 €** (~0.7143 SOL @ 140€/SOL)  
@@ -80,10 +80,10 @@ Because the EUR/SOL spot price fluctuates in live markets, the execution strateg
   - Generate 15 high-engagement meme assets (cartoon jeets being slapped, Wojak red candle despair vs. Chad golden gauntlet) using free tools (Ideogram, Recraft.ai).
   - Package an official Telegram Sticker Pack (`t.me/addstickers/JeetSlapperMemes`).
   - Configure the `@JeetSlapperGameBot` profile, welcome banner, and description.
-- **T-24h: Public Beta & Community Testing (100% Fair Launch — Cumplimiento MiCA/UE)**:
-  - En lugar de crear grupos cerrados u opacos de "insiders" (que bajo las leyes europeas MiCA pueden considerarse manipulación de mercado o concertación de pump-and-dump), se abre una **beta pública y transparente** del juego en el canal oficial.
-  - La comunidad prueba el juego en abierto, reporta bugs y se distribuye el **"Meme Toolkit"** público (memes, gifs y stickers) para que cualquiera pueda compartirlo libremente.
-  - **Transparencia total**: Nadie recibe acceso anticipado al token ni a la dirección del contrato. La única compra previa a la publicación del CA es la compra del creador, que va en la misma transacción de creación (así lo hace pump.fun) y se anuncia públicamente de antemano: cantidad (0,50 SOL ≈ 1,74 % del supply) y wallet.
+- **T-24h: Public Beta & Community Testing (100% Fair Launch — MiCA/EU compliance)**:
+  - Instead of closed or opaque "insider" groups (which under the EU MiCA rules can be considered market manipulation or a coordinated pump-and-dump), a **public, transparent beta** of the game is opened in the official channel.
+  - The community tests the game openly, reports bugs, and the public **"Meme Toolkit"** (memes, gifs and stickers in `brand/`) is shared so anyone can post it freely.
+  - **Full transparency**: nobody gets early access to the token or the contract address. The only buy before the CA is published is the creator's, which goes in the same creation transaction (that's how pump.fun works) and is announced publicly in advance: amount (0.50 SOL ≈ 1.74% of the supply) and wallet.
 
 ### Phase 2: Community Bootstrapping & Public Hype Crescendo (T-24h to T-2h)
 - **T-18h: Public Telegram Opening & Bot Verification**:
@@ -157,10 +157,10 @@ MC: $4k - $16k        MC: $16k - $32k        MC: $32k - $52k        MC: $52k - $
 - **Graduation Trigger**: Real SOL on the bonding curve reaches **85.0 SOL** (~$69,000–$80,000 Market Cap).
 - **On-Chain Protocol Execution**:
   1. The bonding curve locks permanently (`complete = true`).
-  2. Los contratos de pump.fun emparejan los tokens restantes (**206,900,000 tokens / 20.69%**) con los SOL recaudados en el pool de liquidez (PumpSwap).
-  3. Los tokens de LP son quemados/bloqueados automáticamente por el propio protocolo de pump.fun (mediante quema nativa y cierre de cuenta de mint, no mediante el System Program). La liquidez queda bloqueada para siempre.
-  4. Los incentivos y recompensas por graduación se liquidan según las reglas vigentes del protocolo en ese momento.
-  5. En PumpSwap, la wallet creadora acumula la cuota de comisiones por volumen secundario según las especificaciones vigentes de pump.fun.
+  2. pump.fun pairs the remaining tokens (**206,900,000 tokens / 20.69%**) with the raised SOL in the liquidity pool (PumpSwap).
+  3. The LP tokens are burned/locked automatically by pump.fun itself (native burn and closing the mint account, not via the System Program). Liquidity is locked forever.
+  4. Graduation incentives and rewards are settled according to the protocol rules in force at that moment.
+  5. On PumpSwap the creator wallet accrues its share of secondary-volume fees according to pump.fun's current rules.
 
 #### Post-Migration Checklist (First 60 Minutes)
 1. **DexScreener Profile Claim**:
@@ -217,26 +217,26 @@ To establish long-term community confidence and eliminate fear of developer rug 
 - [ ] Free API keys active: Groq Cloud, Google Gemini, Helius, QuickNode, Upstash, Supabase.
 - [ ] IPFS metadata uploaded with high-res token icon and banner.
 - [ ] Atomic Create + Buy script tested and ready for single-block execution.
-- [ ] Comunidad pública y materiales de lanzamiento transparentes preparados (Fair Launch sin grupos cerrados).
-- [ ] Reglas del concurso del juego y premios comunitarios publicadas con transparencia en Telegram.
-- [ ] Verificación de precios de SOL en tiempo real antes de fondear la wallet.
-- [ ] Materiales de DexScreener y redes listos.
+- [ ] Public community and transparent launch materials ready (fair launch, no closed groups).
+- [x] Game contest rules and community prizes published transparently (`/rules/`).
+- [ ] Check the live SOL price before funding the wallet.
+- [x] DexScreener and social assets ready (`brand/`).
 ```
 
 ---
 
-## 7. Aviso Legal, Cumplimiento Normativo (MiCA / UE) y Realidad del Mercado
+## 7. Legal Notice, Regulatory Compliance (MiCA / EU) and Market Reality
 
-### 7.1 Realidad del Mercado en pump.fun
-> **ADVERTENCIA DE RIESGO CAPITAL**: En pump.fun se crean miles de tokens diarios, de los cuales **más del 98% nunca completan la curva de vinculación ni se gradúan**. Existe una probabilidad muy alta de que el capital inicial de 100 € no se recupere. Este proyecto debe abordarse como un experimento técnico, educativo y de aprendizaje de desarrollo con IA, y **en ningún caso como asesoramiento financiero o garantía de rendimiento**.
+### 7.1 Market Reality on pump.fun
+> **CAPITAL RISK WARNING**: thousands of tokens are created on pump.fun every day and **more than 98% never complete the bonding curve or graduate**. It is very likely that the initial €100 will not be recovered. This project must be treated as a technical, educational experiment in building with AI, and **never as financial advice or a promise of returns**.
 
-### 7.2 Cumplimiento Ético y Normativo en la Unión Europea
-- **Prohibición de Manipulación de Mercado**: Queda descartado cualquier esquema de "insiders", grupos privados de coordinación de compras tempranas o raids orquestadas artificialmente para inflar el precio, ya que entran en conflicto con la regulación europea (MiCA) sobre abuso de mercado.
-- **Fair Launch 100% Abierto**: Todo el proceso debe ser público, donde todos los participantes compran exactamente al mismo tiempo tras la publicación abierta del contrato.
-- **Transparencia en el Juego**: La Telegram Mini App se presenta como lo que es: un juego casual interactivo de entretenimiento con recompensas comunitarias, no un producto financiero garantizado.
+### 7.2 Ethical and Regulatory Compliance in the European Union
+- **No market manipulation**: no "insider" schemes, no private groups coordinating early buys and no orchestrated raids to inflate the price — they conflict with the EU market-abuse rules (MiCA).
+- **100% open fair launch**: the whole process is public; everyone can buy at the same time once the contract is published openly (the only prior buy is the announced creator buy in the creation transaction).
+- **Transparency in the game**: the Telegram Mini App is presented as what it is — a casual entertainment game with community rewards, not a financial product with guarantees.
 
 ---
 
 ## 8. Conclusion
 
-`04_TACTICAL_LAUNCH_PLAN.md` completa la hoja de ruta operativa para **JEET SLAPPER ($JSLAP)**, optimizando los recursos disponibles a coste cero, mitigando riesgos regulatorios y asentando expectativas realistas sobre el mercado.
+`04_TACTICAL_LAUNCH_PLAN.md` completes the operational roadmap for **JEET SLAPPER ($JSLAP)**: zero-cost resources, mitigated regulatory risk and realistic market expectations. The launch-day checklist with the real commands is in `STATUS.md`.

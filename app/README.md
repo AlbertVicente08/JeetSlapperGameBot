@@ -1,56 +1,69 @@
-# Jeet Slapper: juego, landing y API
+# Jeet Slapper — game, website and API
 
-- **Landing**: `index.html` → https://jeet-slapper.pages.dev
-- **Juego (Telegram Mini App)**: `play/index.html` + `src/` → https://jeet-slapper.pages.dev/play/
-- **API (Cloudflare Pages Functions)**: `functions/api/*` con la lógica compartida en `server/`
-- **Base de datos**: Supabase (migraciones en `../supabase/migrations/`)
+| Page | Source | URL |
+|---|---|---|
+| Landing | `index.html` | https://jeet-slapper.pages.dev |
+| Game (Telegram Mini App) | `play/index.html` + `src/` | /play/ |
+| Wallet linking (inside Phantom) | `wallet/index.html` + `src/wallet.ts` | /wallet/ |
+| Rules & prizes / Privacy | `rules/`, `privacy/` | /rules/ · /privacy/ |
 
-## Juego
+- **API**: Cloudflare Pages Functions in `functions/api/*`, shared logic in `server/`.
+- **Database**: Supabase (migrations in `../supabase/migrations/`), with `pg_cron` for the weekly tournament.
 
-Rondas de 30 s en 12 casillas:
+## The game
+
+12 squares, 30-second rounds:
 
 | | |
 |---|---|
-| 🧻 Jeet | +10 × multiplicador |
-| 🪙 Jeet dorado | +50 × multiplicador (rápido y raro) |
-| 🐋 Ballena | 3 golpes: +5, +5, +50 |
-| 🚀 PUMP | puntos x2 durante 5 s |
-| ⏱️ Reloj | +3 s (máximo +9 s) |
-| 💎 Diamond hand | −25 y rompe la racha |
-| 💣 Rug | −50, rompe la racha y vacía el tablero |
-| 💨 Jeet escapado | −5 |
+| 🧻 Jeet | +10 × multiplier |
+| 🪙 Golden jeet | +50 × multiplier (fast and rare) |
+| 🐋 Whale | 3 hits: +5, +5, +50 |
+| 🚀 PUMP | x2 points for 5 s |
+| ⏱️ Clock | +3 s (max +9 s) |
+| 💎 Diamond hand | −25, breaks the streak |
+| 💣 Rug | −50, breaks the streak, clears the board |
+| 💨 Escaped jeet | −5 |
 
-- **Combo**: sube 0,5x cada 5 aciertos seguidos (máximo x3).
-- **FINAL PUMP**: los últimos 5 s cuentan x2.
+- **Combo**: +0.5x every 5 consecutive hits (max x3).
+- **FINAL PUMP**: the last 5 s count x2.
 
-El motor (`src/game/engine.ts`) es **determinista**: avanza en pasos de 20 ms con una semilla, así que el servidor puede repetir cualquier partida a partir de los toques.
+The engine (`src/game/engine.ts`) is **deterministic**: fixed 20 ms steps and a seed, so the server can replay any game from its taps.
 
 ## API
 
-| Ruta | Qué hace |
+| Route | What it does |
 |---|---|
-| `POST /api/session` | Valida el initData de Telegram y crea una sesión con semilla (un solo uso) |
-| `POST /api/score` | Detector de bots; si la partida entraría en el top 3, la repite entera; guarda el resultado en `games` y el récord en `players` |
-| `POST /api/leaderboard` | Top 10 y tu posición; revisa si los jugadores siguen en el canal (Boost Comunidad x1,5) |
-| `POST /api/bot` | Webhook del bot (`/start`), protegido con `TELEGRAM_WEBHOOK_SECRET` |
+| `POST /api/session` | Validates Telegram initData, creates a one-time session with a seed, records `startapp` referrals |
+| `POST /api/score` | Bot detector; replays games entering the all-time or weekly top 3; saves to `games` / `players`; alerts the admin on rejected top games |
+| `POST /api/leaderboard` | All-time top 10 (boosts, 👑 medals) + weekly top 10 + your position; re-checks channel membership and holder balances |
+| `POST /api/bot` | Bot webhook: `/start`, `/invite`, `/roast`, `/slap` (protected by `TELEGRAM_WEBHOOK_SECRET`) |
+| `POST /api/cron/weekly` | Closes last week's tournament, posts it in the channel (called by Supabase `pg_cron`, `CRON_SECRET`) |
+| `POST /api/wallet/start` · `POST /api/wallet/link` | Phantom wallet linking with an Ed25519 signature |
+| `GET /api/curve` | pump.fun bonding curve of `TOKEN_MINT` (`{ live: false }` until the token exists) |
 
-Secretos en Cloudflare: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`. En local van en `.dev.vars` (no se sube a git).
+Cloudflare secrets: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_TELEGRAM_ID`, `CRON_SECRET`, `GROQ_API_KEY`, `HELIUS_API_KEY`, and `TOKEN_MINT` (only at launch). Locally they go in `.dev.vars` (never committed).
 
-## Comandos
+## Commands
 
-Juego en local, sin API:
+Game only (no API):
 ```bash
 npm run dev
 ```
 
-Juego + API en local (usa `.dev.vars`):
+Tests:
+```bash
+npm test
+```
+
+Game + API locally (uses `.dev.vars`):
 ```bash
 npm run build && npx wrangler pages dev --port 8788
 ```
 
-Publicar:
+Publish:
 ```bash
 npm run deploy
 ```
 
-El estado del proyecto y los pendientes están en [`../ESTADO.md`](../ESTADO.md).
+Project status and to-dos: [`../STATUS.md`](../STATUS.md).

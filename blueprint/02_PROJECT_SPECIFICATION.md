@@ -1,8 +1,8 @@
 # Project Specification: JEET SLAPPER ($JSLAP)
 
 **Document Reference**: `c:\Users\alber\..Proyectos\crypto\blueprint\02_PROJECT_SPECIFICATION.md`  
-**Requirement Mapping**: R2 (Especificación integral del proyecto ganador)  
-**Acceptance Criteria Mapping**: C2 (Especificación del Proyecto Ganador)  
+**Requirement Mapping**: R2 (Full specification of the winning project)  
+**Acceptance Criteria Mapping**: C2 (Winning Project Specification)  
 **Winning Archetype**: Category C (Memecoin with Interactive Micro-dApp / Game)  
 **Blockchain Ecosystem**: Solana (SPL Token Standard), Pump.fun Bonding Curve  
 **Target DEX Migration**: PumpSwap (pump.fun native AMM)  
@@ -159,9 +159,9 @@ To preserve absolute transparency and eliminate any suspicion of developer dumpi
 2. **Liquidity Seeding**:
    - The remaining **206,900,000 unbought tokens (20.69%)** and **~79.0 SOL** (85.0 SOL minus protocol migration allocation) are transferred to the AMM pool (native PumpSwap).
    - The initial DEX price matches the terminal bonding curve price ($P_{\text{end}} \approx 0.0000004108\text{ SOL/token}$), preventing any arbitrage dump gap at opening.
-3. **Irreversible Liquidity Lock & Burn**: En pump.fun / PumpSwap, los tokens de proveedor de liquidez (LP) se destruyen o bloquean de forma irrevocable de manera nativa por el propio protocolo (utilizando cuentas nulas o de incineración como `1nc1nerator11111111111111111111111111111111` y cierre de cuenta de mint de LP, NUNCA el System Program `11111111...`). La liquidez queda blindada permanentemente contra rug-pulls.
-4. **Creator Graduation Reward & Protocol Changes**: Tras la actualización de pump.fun a PumpSwap, los incentivos de graduación y distribución de comisiones se procesan de forma nativa en la plataforma según los parámetros vigentes del protocolo.
-5. **Post-Graduation Volume Fee Share**: En PumpSwap, la wallet creadora puede acumular comisiones por volumen secundario según las mecánicas activas de reparto de comisiones de pump.fun.
+3. **Irreversible Liquidity Lock & Burn**: on pump.fun / PumpSwap the liquidity-provider (LP) tokens are burned or locked irreversibly by the protocol itself (using null/incinerator accounts such as `1nc1nerator11111111111111111111111111111111` and closing the LP mint, NEVER the System Program `11111111...`). Liquidity is permanently protected against rug pulls.
+4. **Creator Graduation Reward & Protocol Changes**: since pump.fun moved to PumpSwap, graduation incentives and fee distribution are handled natively by the platform according to the protocol rules in force at the time.
+5. **Post-Graduation Volume Fee Share**: on PumpSwap the creator wallet may accrue secondary-volume fees according to pump.fun's current fee-sharing rules.
 
 ---
 
@@ -232,11 +232,11 @@ To directly combat the post-launch plateau where volume cools off at 30–50 SOL
   - **15,000,000 tokens (1.50% of total supply)** are locked into a transparent, public custody vault (`JSLAP_Jackpot_Vault`).
   - **2,417,118 tokens (0.242%)** remain as the dev operational reserve.
 
-#### Jackpot Vault Architecture Specification (Transparencia Comunitaria)
-Dado que desplegar un contrato Anchor personalizado costaría varios SOL en renta y miles de euros en auditoría (inviable para un presupuesto de ~100€), la tesorería de premios se gestiona de forma pública y auditable:
-- Una **wallet de tesorería comunitaria / Squads v4** dedicada exclusivamente a los premios.
-- La dirección de la tesorería y sus movimientos son 100% públicos desde el bloque 0 en Telegram y Solscan.
-- **Aviso de Transparencia Ética**: Los premios son administrados y enviados por el creador a los ganadores verificados en la tabla del juego. No se promete falsamente que sea "un contrato inmutable que el dev no puede tocar", sino un compromiso público y verificable on-chain.
+#### Jackpot Vault Architecture Specification (Community Transparency)
+Deploying a custom Anchor contract would cost several SOL in rent and thousands of euros in audits (not viable with a ~€100 budget), so the prize treasury is managed publicly and auditably:
+- A dedicated **community prize wallet / Squads v4 multisig**, used only for prizes.
+- The treasury address and every movement are 100% public from block 0 on Telegram and Solscan.
+- **Ethical transparency notice**: prizes are managed and sent by the creator to the winners verified by the game. It is never claimed to be "an immutable contract the dev cannot touch": it is a public, on-chain verifiable commitment. Full rules: `/rules/`.
 
 #### 3-Tier Milestone Vesting Schedule (Defeating the Post-Migration Dump Trap)
 Empirical AMM modeling demonstrates that distributing 15M unvested tokens immediately upon PumpSwap graduation causes an immediate **-13.06% price drop** (and up to **-20.40%** if winners liquidate both jackpot and holding bags). Rational whales on the bonding curve would anticipate this sell pressure and dump at 80–84 SOL to front-run the unlock, preventing graduation.

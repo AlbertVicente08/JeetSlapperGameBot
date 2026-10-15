@@ -1,13 +1,15 @@
 // POST /api/score  { initData, sessionId, score, taps }
 //   -> { counted, status, reason?, replayed, best?, ranked?, rank?, improved?, community?, verified? }
 //
-// 1. La sesión debe ser del jugador, no usada y con el tiempo real de una partida.
-// 2. Detector de bots rápido sobre el registro de toques (todas las partidas).
-// 3. Si la partida entraría en el top 3, el servidor la repite entera con la semilla y comprueba
-//    que la puntuación cuadra y que las reacciones son humanas.
-import { json, rpc, type Env, type PagesFunction } from '../../server/env'
-import { isChannelMember, verifyInitData } from '../../server/telegram'
-import { quickCheck, replayCheck, validateTaps, type Status, type Verdict } from '../../server/anticheat'
+// 1. The session must belong to the player, be unused and match a real game duration.
+// 2. Quick bot detector on the tap log (every game).
+// 3. If the game would enter the all-time top 3 or this week's top 3, the server replays it from the seed
+//    and checks that the score adds up and the reactions are human.
+// 4. If a replayed game is rejected or flagged, the admin gets a Telegram alert.
+import { json, rpc, type Env, type PagesFunction } from '../../server/env.ts'
+import { isChannelMember, tg, verifyInitData, escapeHtml } from '../../server/telegram.ts'
+import { quickCheck, replayCheck, validateTaps, type Status, type Verdict } from '../../server/anticheat.ts'
+import { refreshHolder } from '../../server/holder.ts'
 
 const MAX_SCORE = 20_000
 const COMMUNITY_BOOST = 1.5
@@ -20,37 +22,40 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   try {
     body = await request.json()
   } catch {
-    return json({ error: 'JSON inválido' }, 400)
+    return json({ error: 'Invalid JSON' }, 400)
   }
 
   const user = await verifyInitData(body.initData ?? '', env.TELEGRAM_BOT_TOKEN)
-  if (!user) return json({ error: 'No autorizado: abre el juego desde Telegram' }, 401)
+  if (!user) return json({ error: 'Unauthorized: open the game from Telegram' }, 401)
 
   const { score, sessionId, taps } = body
   if (typeof score !== 'number' || !Number.isInteger(score) || score < 0 || score > MAX_SCORE) {
-    return json({ error: 'Puntuación inválida' }, 400)
+    return json({ error: 'Invalid score' }, 400)
   }
   if (typeof sessionId !== 'string' || !/^[0-9a-f-]{36}$/i.test(sessionId)) {
-    return json({ error: 'Falta la sesión de la partida' }, 400)
+    return json({ error: 'Missing game session' }, 400)
   }
-  if (!validateTaps(taps)) return json({ error: 'Registro de toques inválido' }, 400)
+  if (!validateTaps(taps)) return json({ error: 'Invalid tap log' }, 400)
 
   try {
     const session = await rpc<{ seed: number; elapsed_ms: number } | null>(env, 'claim_session', {
       p_id: sessionId,
       p_telegram_id: user.id,
     })
-    if (!session) return json({ error: 'Partida caducada o ya enviada' }, 409)
+    if (!session) return json({ error: 'Game expired or already submitted' }, 409)
 
     let verdict: Verdict = quickCheck(taps, score, session.elapsed_ms)
     let replayed = false
-    const member = await isChannelMember(env.TELEGRAM_BOT_TOKEN, user.id)
+    const [member] = await Promise.all([isChannelMember(env.TELEGRAM_BOT_TOKEN, user.id), refreshHolder(env, user.id)])
 
     if (verdict.status !== 'rejected' && score > 0) {
-      const ranked = Math.round(score * (member ? COMMUNITY_BOOST : 1))
-      const threshold = await rpc<number>(env, 'ranked_at', { p_rank: VERIFY_TOP })
-      if (ranked >= threshold) {
-        // Entraría en el top 3: se repite la partida entera
+      const ranked = Math.round(score * (member ? COMMUNITY_BOOST : 1)) // lower bound: holder/squad boosts only add
+      const [allTime, weekly] = await Promise.all([
+        rpc<number>(env, 'ranked_at', { p_rank: VERIFY_TOP }),
+        rpc<number>(env, 'weekly_at', { p_rank: VERIFY_TOP }),
+      ])
+      if (ranked >= allTime || score >= weekly) {
+        // Would enter a top 3: replay the whole game
         const r = replayCheck(session.seed, taps, score)
         replayed = true
         verdict = {
@@ -61,7 +66,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       }
     }
 
-    // Lo sospechoso cuenta salvo que vaya al top 3; lo rechazado nunca cuenta
+    // Suspicious games count unless they're going to a top 3; rejected games never count
     const counted = verdict.status === 'ok' || (verdict.status === 'suspicious' && !replayed)
     await rpc(env, 'log_game', {
       p_session: sessionId,
@@ -71,7 +76,23 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       p_reason: verdict.reason ?? null,
       p_replayed: replayed,
       p_stats: verdict.stats,
+      p_counted: counted,
     })
+
+    if (replayed && verdict.status !== 'ok' && env.ADMIN_TELEGRAM_ID) {
+      const name = user.username ? `@${user.username}` : (user.first_name ?? 'Anon')
+      await tg(env.TELEGRAM_BOT_TOKEN, 'sendMessage', {
+        chat_id: env.ADMIN_TELEGRAM_ID,
+        parse_mode: 'HTML',
+        text: [
+          `🚨 <b>Top-3 game ${verdict.status}</b>`,
+          `Player: ${escapeHtml(name)} (id <code>${user.id}</code>)`,
+          `Score: <b>${score}</b>`,
+          `Reason: ${escapeHtml(verdict.reason ?? '-')}`,
+          `Stats: <code>${escapeHtml(JSON.stringify(verdict.stats))}</code>`,
+        ].join('\n'),
+      })
+    }
 
     if (!counted) {
       return json({ counted: false, status: verdict.status, reason: verdict.reason, replayed })
@@ -88,6 +109,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json({ ...result, counted: true, status: verdict.status, reason: verdict.reason, replayed })
   } catch (e) {
     console.error(e)
-    return json({ error: 'Error guardando la puntuación' }, 502)
+    return json({ error: 'Error saving the score' }, 502)
   }
 }

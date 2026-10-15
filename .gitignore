@@ -1,0 +1,24 @@
+# Dependencias y builds
+node_modules/
+dist/
+.wrangler/
+
+# Secretos (NUNCA subir)
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# Wallets / claves
+*.keypair.json
+id.json
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# Restos de los agentes de Antigravity
+.agents/teamwork/victory_auditor_1/ts_check/node_modules/
+__pycache__/

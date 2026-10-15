@@ -23,7 +23,8 @@ c:\Users\alber\..Proyectos\crypto\blueprint\
 ├── 02_PROJECT_SPECIFICATION.md              # R2 / C2: $JSLAP game, tokenomics & retention engine
 ├── 03_TECHNICAL_ARCHITECTURE_AND_PROMPTS.md # R3 / C3: 0€ tech stack, TS code & 6 AI prompts
 ├── 04_TACTICAL_LAUNCH_PLAN.md               # R4 / C4: ~100€ capital allocation & launch playbook
-└── 05_COMMUNITY_GROWTH_PLAN.md              # Phased growth plan: X (2 accounts) -> Telegram -> projects
+├── 05_COMMUNITY_GROWTH_PLAN.md              # Phased growth plan: X (2 accounts) -> Telegram -> projects
+└── 06_X_LAUNCH_KIT.md                       # Ready-to-copy social launch kit, threads, prompts & calendar
 ```
 
 ---
@@ -95,7 +96,28 @@ c:\Users\alber\..Proyectos\crypto\blueprint\
     * *Phase 2 (T-24h to T-2h)*: Public Telegram opening, 8-tweet X narrative thread, interactive chat bot roasts unleashed, live Telegram Voice AMA.
     * *Phase 3 (T-0h)*: Atomic single-transaction creation + genesis buy in block 0 (MEV frontrun-proof), sub-second CA distribution, open community launch.
   - **Bonding Curve Milestones**: Tactical execution from 0% Spark through King of the Hill (25%–50%), Pre-Graduation Rush (50%–85%), and 100% PumpSwap / AMM Graduation with permanent LP lock/burn and DexScreener verification.
-  - **Legal & Risk Compliance**: Complete alignment with EU MiCA regulations (no pump-and-dump coordination) and transparent market risk disclosure (>98% token fail rate).
+---
+
+### 5. [05_COMMUNITY_GROWTH_PLAN.md](05_COMMUNITY_GROWTH_PLAN.md) — Phased Community Growth Plan
+- **Focus**: Organic audience acquisition and multi-platform growth engine.
+- **Core Insights**:
+  - Strategic philosophy: *"The asset is the audience, not the token."*
+  - Dual-account X architecture: `@albertv_dev` (personal builder voice) vs `@JeetSlapperGame` (project brand voice).
+  - Phased roadmap: Phase 1 Seed (0 → 100 players), Phase 2 Traction (100 → 1,000 players), Phase 3 Community (1,000 → 10,000 players), and Phase 4 Token Launch (strict qualification gate).
+  - Compliance guidelines with EU MiCA and Spanish CNMV regulations.
+
+---
+
+### 6. [06_X_LAUNCH_KIT.md](06_X_LAUNCH_KIT.md) — X & Community Launch Kit
+- **Focus**: Production-ready social copy, graphic prompts, thread scripts, and operational calendars.
+- **Core Insights**:
+  - Project X profile config (`@JeetSlapperGame`, bio, banner, avatar) and 6-post pinned official launch thread.
+  - Personal builder profile config (`@albertv_dev`) and 5-post build-in-public pinned thread with 0€ OpEx breakdown.
+  - X Community setup with 10 copy-paste house rules + Telegram channel & discussion group pinned copy.
+  - Generative AI prompt suite (Midjourney / Ideogram / DALL-E) for 1500×500 headers and 1:1 avatars matching `brand/slap-original-2000.jpg`.
+  - Day-by-day 4-week posting calendar with Week 1 fully written (~10 project posts, ~7 personal posts, 5 channel posts).
+  - High-intent reply strategy for `@albertv_dev` at 0 followers (15–20 daily replies, target builder archetypes, non-shill templates).
+  - Weekly Monday KPI tracking dashboard across Supabase, Telegram, and X analytics.
 
 ---
 

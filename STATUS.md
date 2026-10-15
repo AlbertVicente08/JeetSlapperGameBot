@@ -26,6 +26,7 @@
 | Anti-cheat: bot detector on every game, full server replay for games entering the all-time or weekly top 3, admin alert on Telegram if one is rejected | `app/server/anticheat.ts`, table `games` |
 | Automated tests (26): engine determinism, anti-cheat, initData, holder boost, Solana helpers | `npm --prefix app test` |
 | Sticker pack (8) · meme kit (5) · banner 1500×500 · avatar · token logo | [t.me/addstickers/jeetslapper_by_JeetSlapperGameBot](https://t.me/addstickers/jeetslapper_by_JeetSlapperGameBot), `brand/` |
+| Social & community launch kit (X profiles, threads, AI prompts, 4-week plan) | `blueprint/06_X_LAUNCH_KIT.md` |
 | Code on GitHub | https://github.com/AlbertVicente08/JeetSlapperGameBot |
 | Monthly cost | €0 (Cloudflare Pages + Supabase + Groq free tiers) |
 
@@ -44,11 +45,11 @@
 
 - [ ] **Make the GitHub repo private** (Settings → Danger Zone → Change visibility). It has no secrets, but the anti-cheat thresholds are visible.
 - [ ] **Save `.env` in a password manager** (Bitwarden, 1Password…).
-- [ ] **Create the project X account** (e.g. `@JeetSlapperGame`) and send me the handle — see `blueprint/05_COMMUNITY_GROWTH_PLAN.md`.
+- [ ] **Create the project X account** (e.g. `@JeetSlapperGame`) and send me the handle — see `blueprint/06_X_LAUNCH_KIT.md` §1 and `blueprint/05_COMMUNITY_GROWTH_PLAN.md`.
 - [ ] **BotFather → /mybots → Bot Settings → Configure Mini App** → `https://jeet-slapper.pages.dev/play/` (direct link `t.me/JeetSlapperGameBot?startapp` + Telegram app search).
 - [ ] **Bot permissions in the channel**: it needs **"Post messages"** to publish the weekly results.
 - [ ] **Play a game from your phone** to test the new version end to end.
-- [ ] **Week 1 of the growth plan**: X bios + pinned thread, chat rules + anti-spam bot, invite 10–20 friends.
+- [ ] **Week 1 of the growth plan**: X bios + pinned threads, chat rules + anti-spam bot, invite 10–20 friends — ready to copy from `blueprint/06_X_LAUNCH_KIT.md`.
 - [ ] **Create $JSLAP on pump.fun** and set `TOKEN_MINT` (see the launch checklist below). The site already presents the token as live; Holder Boost, the curve bar and holder balances start working as soon as the mint is set.
 - [ ] **Prize budget**: weekly 175,000 + monthly 250,000 $JSLAP ≈ 9.1M + 3M = **~12.1M $JSLAP per year (1.2% of the supply)**. Decide where it comes from (dev bag, creator fees, buybacks) and fund the public prize wallet before paying the first prize.
 - [ ] **Talk to a legal advisor** before paying token prizes: prizes where buying the token increases your chances can be treated as regulated gambling (you are the organiser and you are in Spain).

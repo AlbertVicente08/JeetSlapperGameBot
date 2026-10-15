@@ -22,7 +22,8 @@ c:\Users\alber\..Proyectos\crypto\blueprint\
 ├── 01_COMPARATIVE_ANALYSIS.md                # R1 / C1: Concept evaluation & scoring matrix
 ├── 02_PROJECT_SPECIFICATION.md              # R2 / C2: $JSLAP game, tokenomics & retention engine
 ├── 03_TECHNICAL_ARCHITECTURE_AND_PROMPTS.md # R3 / C3: 0€ tech stack, TS code & 6 AI prompts
-└── 04_TACTICAL_LAUNCH_PLAN.md               # R4 / C4: ~100€ capital allocation & launch playbook
+├── 04_TACTICAL_LAUNCH_PLAN.md               # R4 / C4: ~100€ capital allocation & launch playbook
+└── 05_COMUNIDAD_BERTOBCN.md                 # Embudo X -> Telegram -> proyectos y plan de 30 días
 ```
 
 ---

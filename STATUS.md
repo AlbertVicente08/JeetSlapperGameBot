@@ -1,6 +1,10 @@
 # Project status — Jeet Slapper / BertoBCN
 
-**Last updated**: 2026-10-16. This is the living list of what's done and what's pending. The `blueprint/` documents are the original plan (by Antigravity, corrected); this file is what's real.
+**Status**: 📦 **Archived / Offline**. The public experiment was concluded on 2026-10-16.
+Public online infrastructure has been cleanly taken down:
+* Cloudflare Pages project (`jeet-slapper`) deleted from production.
+* Telegram bot webhook deleted (bot deactivated).
+* Codebase and GitHub repository preserved as a technical reference & portfolio.
 
 ---
 

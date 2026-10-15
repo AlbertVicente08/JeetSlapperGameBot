@@ -30,11 +30,11 @@
 | Code on GitHub | https://github.com/AlbertVicente08/JeetSlapperGameBot |
 | Monthly cost | €0 (Cloudflare Pages + Supabase + Groq free tiers) |
 
-### Token features (LIVE on pump.fun · CA: `AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump`)
+### Token features (LIVE on pump.fun · CA: `2XH6ghptg4FeKCgyn7KqaiEcei5ivgniTqi9nfZApump`)
 | What | Status |
 |---|---|
 | Connect Phantom (signature-verified, one wallet per account) | ✅ works now: Ranking → Connect Phantom → `/wallet/` page inside Phantom |
-| Holder Boost x2.5 (≥100k) / x5 (≥500k), 30-min maturation, drops when selling | ✅ LIVE: verified via Helius RPC with live mint `AjD35...pump` |
+| Holder Boost x2.5 (≥100k) / x5 (≥500k), 30-min maturation, drops when selling | ✅ LIVE: verified via Helius RPC with live mint `2XH6...pump` |
 | Bonding-curve bar in the game | ✅ LIVE: queries live pump.fun bonding curve via `/api/curve` |
 | Graduation Jackpot rules published | ✅ `/rules/` section 4 |
 | pump.fun / DexScreener banner + logo | ✅ `brand/banner-1500x500.png`, `brand/token-logo-1000.jpg` |
@@ -50,7 +50,7 @@
 - [ ] **Play a game from your phone** to test the new version end to end.
 - [ ] **Pin the CA and launch announcement in Telegram** (`t.me/RealBertoBcn` & group).
 - [ ] **Publish the launch tweet / thread** from `@JeetSlapperGame` and quote-retweet from `@albertv_dev` (ready in `blueprint/06_X_LAUNCH_KIT.md` §3).
-- [x] **Create $JSLAP on pump.fun** and set `TOKEN_MINT` (`AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump`) — **DONE & DEPLOYED**.
+- [x] **Create $JSLAP on pump.fun** and set `TOKEN_MINT` (`2XH6ghptg4FeKCgyn7KqaiEcei5ivgniTqi9nfZApump`) — **DONE & DEPLOYED**.
 - [ ] **Prize budget**: weekly 175,000 + monthly 250,000 $JSLAP ≈ 9.1M + 3M = **~12.1M $JSLAP per year (1.2% of the supply)**. Decide where it comes from (dev bag, creator fees, buybacks) and fund the public prize wallet before paying the first prize.
 - [ ] **Talk to a legal advisor** before paying token prizes: prizes where buying the token increases your chances can be treated as regulated gambling (you are the organiser and you are in Spain).
 

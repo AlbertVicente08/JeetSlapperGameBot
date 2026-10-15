@@ -76,7 +76,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (isPrivate && (cmd === '/start' || cmd === '/play' || cmd === '/help')) {
       const referrer = parseReferral(arg)
       if (referrer) await rpc(env, 'add_referral', { p_referred: msg.from.id, p_referrer: referrer })
-      const mint = env.TOKEN_MINT || 'AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump'
+      const mint = env.TOKEN_MINT || '2XH6ghptg4FeKCgyn7KqaiEcei5ivgniTqi9nfZApump'
       await send(welcomeMsg(mint), {
         reply_markup: {
           inline_keyboard: [

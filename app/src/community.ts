@@ -3,6 +3,10 @@ export const LINKS = {
   channel: 'https://t.me/RealBertoBcn',
   chat: 'https://t.me/+aGQnR6gxz_oxNWY0',
   twitter: 'https://x.com/albertv_dev',
+  twitterGame: 'https://x.com/JeetSlapperGame',
+  pumpFun: 'https://pump.fun/coin/AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump',
+  dexscreener: 'https://dexscreener.com/solana/AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump',
+  ca: 'AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump',
   rules: 'https://jeet-slapper.pages.dev/rules/',
   privacy: 'https://jeet-slapper.pages.dev/privacy/',
 }

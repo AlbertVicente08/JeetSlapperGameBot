@@ -18,20 +18,23 @@ const LINKS = {
   channel: 'https://t.me/RealBertoBcn',
   chat: 'https://t.me/+aGQnR6gxz_oxNWY0',
   x: 'https://x.com/albertv_dev',
+  xGame: 'https://x.com/JeetSlapperGame',
 }
 
-const WELCOME = [
-  '👋 <b>Welcome to Jeet Slapper</b>',
-  '',
-  'Slap the jeets 🧻, take down the whales 🐋, grab power-ups 🚀, dodge the rugs 💣 and <b>never touch the diamond hands</b> 💎.',
-  '30-second rounds, a global leaderboard and <b>weekly & monthly tournaments with $JSLAP prizes</b> 🏆.',
-  '',
-  '👛 <b>Ranked mode</b>: connect your Phantom wallet in the game (Ranking → Connect Phantom). Prizes are sent there.',
-  '⚡ <b>Boosts</b> multiply your scores:',
-  '• 📣 Community x1.5 — be in the BertoBCN channel',
-  '• 🤝 Squad +10% per friend who plays, up to +50% — /invite',
-  '• 👛 Holder x2.5 (≥100k $JSLAP) or x5 (≥500k), after holding 30 min',
-].join('\n')
+const welcomeMsg = (mint?: string) =>
+  [
+    '👋 <b>Welcome to Jeet Slapper</b>',
+    '',
+    'Slap the jeets 🧻, take down the whales 🐋, grab power-ups 🚀, dodge the rugs 💣 and <b>never touch the diamond hands</b> 💎.',
+    '30-second rounds, a global leaderboard and <b>weekly & monthly tournaments with $JSLAP prizes</b> 🏆.',
+    '',
+    '👛 <b>Ranked mode</b>: connect your Phantom wallet in the game (Ranking → Connect Phantom). Prizes are sent there.',
+    '⚡ <b>Boosts</b> multiply your scores:',
+    '• 📣 Community x1.5 — be in the BertoBCN channel',
+    '• 🤝 Squad +10% per friend who plays, up to +50% — /invite',
+    '• 👛 Holder x2.5 (≥100k $JSLAP) or x5 (≥500k), after holding 30 min',
+    ...(mint ? ['', `🪙 <b>Official CA</b>: <code>${mint}</code>`] : []),
+  ].join('\n')
 
 interface TgFrom {
   id: number
@@ -73,13 +76,18 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (isPrivate && (cmd === '/start' || cmd === '/play' || cmd === '/help')) {
       const referrer = parseReferral(arg)
       if (referrer) await rpc(env, 'add_referral', { p_referred: msg.from.id, p_referrer: referrer })
-      await send(WELCOME, {
+      const mint = env.TOKEN_MINT || 'AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump'
+      await send(welcomeMsg(mint), {
         reply_markup: {
           inline_keyboard: [
             [{ text: '🎮 Play', web_app: { url: GAME_URL } }],
             [
+              { text: '🪙 Buy $JSLAP', url: `https://pump.fun/coin/${mint}` },
               { text: '📣 Channel', url: LINKS.channel },
+            ],
+            [
               { text: '💬 Chat', url: LINKS.chat },
+              { text: '𝕏 Game', url: LINKS.xGame },
             ],
             [
               { text: '𝕏 BertoBCN', url: LINKS.x },

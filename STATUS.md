@@ -24,18 +24,18 @@
 | Squad Boost +10% per invited friend who plays (max +50%) | `/invite`, game, `t.me/JeetSlapperGameBot?start=ref_<id>` |
 | Share: X post, challenge a friend on Telegram, score card image | Results screen |
 | Anti-cheat: bot detector on every game, full server replay for games entering the all-time or weekly top 3, admin alert on Telegram if one is rejected | `app/server/anticheat.ts`, table `games` |
-| Automated tests (26): engine determinism, anti-cheat, initData, holder boost, Solana helpers | `npm --prefix app test` |
+| Automated tests (27): engine determinism, anti-cheat, initData, holder boost, Solana helpers | `npm --prefix app test` |
 | Sticker pack (8) · meme kit (5) · banner 1500×500 · avatar · token logo | [t.me/addstickers/jeetslapper_by_JeetSlapperGameBot](https://t.me/addstickers/jeetslapper_by_JeetSlapperGameBot), `brand/` |
 | Social & community launch kit (X profiles, threads, AI prompts, 4-week plan) | `blueprint/06_X_LAUNCH_KIT.md` |
 | Code on GitHub | https://github.com/AlbertVicente08/JeetSlapperGameBot |
 | Monthly cost | €0 (Cloudflare Pages + Supabase + Groq free tiers) |
 
-### Token features (switch on automatically when `TOKEN_MINT` is set)
+### Token features (LIVE on pump.fun · CA: `AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump`)
 | What | Status |
 |---|---|
 | Connect Phantom (signature-verified, one wallet per account) | ✅ works now: Ranking → Connect Phantom → `/wallet/` page inside Phantom |
-| Holder Boost x2.5 (≥100k) / x5 (≥500k), 30-min maturation, drops when selling | ✅ code ready, reads balances via Helius once the mint is set |
-| Bonding-curve bar in the game | ✅ code ready, validated against a live pump.fun token |
+| Holder Boost x2.5 (≥100k) / x5 (≥500k), 30-min maturation, drops when selling | ✅ LIVE: verified via Helius RPC with live mint `AjD35...pump` |
+| Bonding-curve bar in the game | ✅ LIVE: queries live pump.fun bonding curve via `/api/curve` |
 | Graduation Jackpot rules published | ✅ `/rules/` section 4 |
 | pump.fun / DexScreener banner + logo | ✅ `brand/banner-1500x500.png`, `brand/token-logo-1000.jpg` |
 
@@ -45,12 +45,12 @@
 
 - [ ] **Make the GitHub repo private** (Settings → Danger Zone → Change visibility). It has no secrets, but the anti-cheat thresholds are visible.
 - [ ] **Save `.env` in a password manager** (Bitwarden, 1Password…).
-- [ ] **Create the project X account** (e.g. `@JeetSlapperGame`) and send me the handle — see `blueprint/06_X_LAUNCH_KIT.md` §1 and `blueprint/05_COMMUNITY_GROWTH_PLAN.md`.
 - [ ] **BotFather → /mybots → Bot Settings → Configure Mini App** → `https://jeet-slapper.pages.dev/play/` (direct link `t.me/JeetSlapperGameBot?startapp` + Telegram app search).
 - [ ] **Bot permissions in the channel**: it needs **"Post messages"** to publish the weekly results.
 - [ ] **Play a game from your phone** to test the new version end to end.
-- [ ] **Week 1 of the growth plan**: X bios + pinned threads, chat rules + anti-spam bot, invite 10–20 friends — ready to copy from `blueprint/06_X_LAUNCH_KIT.md`.
-- [ ] **Create $JSLAP on pump.fun** and set `TOKEN_MINT` (see the launch checklist below). The site already presents the token as live; Holder Boost, the curve bar and holder balances start working as soon as the mint is set.
+- [ ] **Pin the CA and launch announcement in Telegram** (`t.me/RealBertoBcn` & group).
+- [ ] **Publish the launch tweet / thread** from `@JeetSlapperGame` and quote-retweet from `@albertv_dev` (ready in `blueprint/06_X_LAUNCH_KIT.md` §3).
+- [x] **Create $JSLAP on pump.fun** and set `TOKEN_MINT` (`AjD35QUtwy6NieqkkAKKNacfzQVvdh47BR6pHr6Xpump`) — **DONE & DEPLOYED**.
 - [ ] **Prize budget**: weekly 175,000 + monthly 250,000 $JSLAP ≈ 9.1M + 3M = **~12.1M $JSLAP per year (1.2% of the supply)**. Decide where it comes from (dev bag, creator fees, buybacks) and fund the public prize wallet before paying the first prize.
 - [ ] **Talk to a legal advisor** before paying token prizes: prizes where buying the token increases your chances can be treated as regulated gambling (you are the organiser and you are in Spain).
 
